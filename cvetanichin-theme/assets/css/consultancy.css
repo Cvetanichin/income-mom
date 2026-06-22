@@ -1,0 +1,33 @@
+/* Cvetanichin — Domain 1: CSO Consultancy Theme
+   Ochre gold · warm stone · slate — B2B strategic services */
+
+:root {
+  --surface-base:    #EDEAE5;
+  --surface-subtle:  #D3D0CB;
+  --surface-muted:   #C4C0BA;
+  --surface-inverse: #393E41;
+  --surface-white:   #FAF9F6;
+  --surface-accent:  #E2C044;
+
+  --text-primary:   #1E2019;
+  --text-secondary: #393E41;
+  --text-muted:     #8A9298;
+  --text-inverse:   #FAF9F6;
+  --text-accent:    #B89928;
+
+  --accent-primary:          #E2C044;
+  --accent-light:            #EDDA85;
+  --accent-deep:             #B89928;
+  --accent-pale:             #F8F3DC;
+  --accent-fg:               #1E2019;
+  --accent-secondary:        #587B7F;
+  --accent-secondary-light:  #8AABB0;
+
+  --border-subtle:   rgba(226,192,68,0.15);
+  --border-emphasis: rgba(226,192,68,0.22);
+  --border-strong:   rgba(226,192,68,0.35);
+  --border-accent:   rgba(226,192,68,0.60);
+  --border-inverse:  rgba(250,249,246,0.07);
+
+  --shadow-warm: 0 4px 24px rgba(180,153,40,0.10);
+}

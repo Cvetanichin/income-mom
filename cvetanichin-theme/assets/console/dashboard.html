@@ -1,0 +1,2006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vaska's Creative Life Space</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  /* ─────────────────────────────────────────────
+     DESIGN TOKENS
+  ───────────────────────────────────────────── */
+  :root {
+    --bg:        #0C0B09;
+    --surface:   #141210;
+    --surface2:  #1C1915;
+    --surface3:  #231F1B;
+    --border:    rgba(184,149,100,0.12);
+    --border-hi: rgba(184,149,100,0.28);
+    --gold:      #B8956A;
+    --gold-lt:   #D4B48C;
+    --gold-dk:   #8A6E4A;
+    --mauve:     #9B7AAF;
+    --mauve-lt:  #BBA0CC;
+    --sage:      #7A9E8A;
+    --sage-lt:   #A8C4B4;
+    --rose:      #C47A8A;
+    --text:      #F0EAE0;
+    --text-md:   #C8C0B4;
+    --text-muted:#7A746C;
+    --text-dim:  #4A443E;
+    --radius:    10px;
+    --radius-lg: 16px;
+    --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Role accent overrides */
+    --role-color: var(--gold);
+    --role-color-lt: var(--gold-lt);
+    --role-glow: rgba(184,149,100,0.06);
+  }
+
+  /* Role variants */
+  [data-role="mother"]   { --role-color: var(--rose);  --role-color-lt: #D4A0AC; --role-glow: rgba(196,122,138,0.07); }
+  [data-role="planner"]  { --role-color: var(--sage);  --role-color-lt: var(--sage-lt); --role-glow: rgba(122,158,138,0.07); }
+  [data-role="dreamer"]  { --role-color: var(--mauve); --role-color-lt: var(--mauve-lt); --role-glow: rgba(155,122,175,0.08); }
+  [data-role="sacred"]   { --role-color: #D4C4A0; --role-color-lt: #EAE0C4; --role-glow: rgba(212,196,160,0.07); }
+
+  /* ─────────────────────────────────────────────
+     RESET & BASE
+  ───────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  ::selection { background: rgba(184,149,100,0.25); }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 2px; }
+
+  /* ─────────────────────────────────────────────
+     LAYOUT SHELL
+  ───────────────────────────────────────────── */
+  .shell {
+    display: grid;
+    grid-template-columns: 220px 1fr 300px;
+    grid-template-rows: 64px 1fr;
+    min-height: 100vh;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  /* ─────────────────────────────────────────────
+     MASTHEAD
+  ───────────────────────────────────────────── */
+  .masthead {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .masthead-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: 0.02em;
+  }
+  .masthead-brand span { color: var(--role-color); }
+  .masthead-center {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 6px 8px;
+  }
+  .role-pill {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--text-muted);
+    border: 1px solid transparent;
+  }
+  .role-pill:hover { color: var(--text-md); background: var(--surface2); }
+  .role-pill.active {
+    background: var(--surface3);
+    border-color: var(--border-hi);
+    color: var(--role-color);
+  }
+  .masthead-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .time-display {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+  .time-display span { color: var(--text-md); }
+  .ritual-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border-hi);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--role-color);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    letter-spacing: 0.03em;
+  }
+  .ritual-btn:hover { background: var(--surface3); }
+  .ritual-btn .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--role-color);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.85); }
+  }
+
+  /* ─────────────────────────────────────────────
+     LEFT SIDEBAR
+  ───────────────────────────────────────────── */
+  .sidebar {
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .sidebar-section-label {
+    padding: 10px 20px 6px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    cursor: pointer;
+    transition: var(--transition);
+    border-left: 2px solid transparent;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .nav-item:hover { color: var(--text-md); background: var(--role-glow); }
+  .nav-item.active {
+    color: var(--role-color);
+    border-left-color: var(--role-color);
+    background: var(--role-glow);
+  }
+  .nav-item .icon {
+    width: 16px; height: 16px;
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+  .nav-badge {
+    margin-left: auto;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1px 7px;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+  }
+  .mood-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .mood-selector label {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+  .mood-dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: var(--transition);
+  }
+  .mood-dot:hover, .mood-dot.active { border-color: var(--text-md); transform: scale(1.1); }
+
+  /* ─────────────────────────────────────────────
+     MAIN CANVAS
+  ───────────────────────────────────────────── */
+  .canvas {
+    padding: 28px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  /* Panel — base card */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color var(--transition);
+  }
+  .panel:hover { border-color: var(--border-hi); }
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .panel-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: 0.01em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .panel-title .accent { color: var(--role-color); }
+  .panel-actions { display: flex; gap: 8px; }
+  .btn-ghost {
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 11px;
+    color: var(--text-muted);
+    background: transparent;
+    cursor: pointer;
+    transition: var(--transition);
+    letter-spacing: 0.04em;
+  }
+  .btn-ghost:hover { border-color: var(--border-hi); color: var(--text-md); background: var(--surface2); }
+  .btn-accent {
+    padding: 4px 12px;
+    background: var(--role-color);
+    border: none;
+    border-radius: 6px;
+    font-size: 11px;
+    color: var(--bg);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    letter-spacing: 0.04em;
+  }
+  .btn-accent:hover { opacity: 0.85; }
+  .panel-body { padding: 20px; }
+
+  /* ─────────────────────────────────────────────
+     WELCOME / CONTEXT MODULE
+  ───────────────────────────────────────────── */
+  .welcome-panel {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border: 1px solid var(--border-hi);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .welcome-panel::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: var(--role-glow);
+    filter: blur(60px);
+    pointer-events: none;
+  }
+  .welcome-greeting {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--role-color);
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+  .welcome-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.25;
+    margin-bottom: 10px;
+  }
+  .welcome-context {
+    font-size: 13px;
+    color: var(--text-md);
+    line-height: 1.65;
+    max-width: 540px;
+    margin-bottom: 20px;
+  }
+  .context-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .ctx-tag {
+    padding: 4px 12px;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+  .ctx-tag.hi { border-color: var(--border-hi); color: var(--role-color); }
+
+  /* ─────────────────────────────────────────────
+     GRID LAYOUTS
+  ───────────────────────────────────────────── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+  /* ─────────────────────────────────────────────
+     RITUAL MODULE
+  ───────────────────────────────────────────── */
+  .ritual-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .ritual-step {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+  .ritual-step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border-hi);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--role-color);
+    font-weight: 600;
+    flex-shrink: 0;
+    background: var(--surface2);
+    margin-top: 2px;
+  }
+  .ritual-step-num.done {
+    background: var(--role-color);
+    color: var(--bg);
+    border-color: var(--role-color);
+  }
+  .ritual-step-content {}
+  .ritual-step-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-md);
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    font-size: 10px;
+  }
+  .ritual-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-style: italic;
+    resize: none;
+    outline: none;
+    transition: border-color var(--transition);
+    line-height: 1.5;
+  }
+  .ritual-input::placeholder { color: var(--text-dim); font-style: italic; }
+  .ritual-input:focus { border-color: var(--border-hi); }
+  .ritual-complete-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--surface2);
+    border: 1px dashed var(--border-hi);
+    border-radius: 8px;
+    color: var(--role-color);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 4px;
+  }
+  .ritual-complete-btn:hover { background: var(--surface3); border-style: solid; }
+
+  /* ─────────────────────────────────────────────
+     MOODBOARD MODULE
+  ───────────────────────────────────────────── */
+  .moodboard-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .mood-tile {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mood-tile:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    border-color: var(--border-hi);
+  }
+  .mood-tile.tall { grid-row: span 2; aspect-ratio: unset; }
+  .mood-tile.wide { grid-column: span 2; }
+  .mood-tile-label {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 8px 10px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    font-size: 10px;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 0.06em;
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+  .mood-tile:hover .mood-tile-label { opacity: 1; }
+  .mood-tile-icon {
+    font-size: 28px;
+    opacity: 0.5;
+    transition: opacity var(--transition);
+  }
+  .mood-tile:hover .mood-tile-icon { opacity: 0.8; }
+
+  /* Tile color themes */
+  .tile-amber   { background: linear-gradient(135deg, #2A1F0E, #3A2A12); }
+  .tile-mauve   { background: linear-gradient(135deg, #1E1228, #2A1A38); }
+  .tile-sage    { background: linear-gradient(135deg, #111E16, #182814); }
+  .tile-rose    { background: linear-gradient(135deg, #220F14, #341420); }
+  .tile-ivory   { background: linear-gradient(135deg, #1C1A16, #26221A); }
+  .tile-navy    { background: linear-gradient(135deg, #0D1420, #12202E); }
+  .tile-clay    { background: linear-gradient(135deg, #241A12, #32220E); }
+  .tile-pearl   { background: linear-gradient(135deg, #1A1A1A, #222018); }
+
+  /* ─────────────────────────────────────────────
+     TASK / ALIGNMENT MODULE
+  ───────────────────────────────────────────── */
+  .task-list { display: flex; flex-direction: column; gap: 8px; }
+  .task-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  .task-item:hover { border-color: var(--border-hi); background: var(--surface3); }
+  .task-check {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-hi);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+  }
+  .task-item.done .task-check {
+    background: var(--role-color);
+    border-color: var(--role-color);
+  }
+  .task-item.done .task-text { text-decoration: line-through; color: var(--text-dim); }
+  .task-check-icon { font-size: 10px; color: var(--bg); display: none; }
+  .task-item.done .task-check-icon { display: block; }
+  .task-text { font-size: 13px; color: var(--text-md); flex: 1; }
+  .task-tag {
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+  .task-tag.urgent { color: var(--rose); border-color: rgba(196,122,138,0.3); }
+  .task-tag.aligned { color: var(--sage); border-color: rgba(122,158,138,0.3); }
+  .add-task-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--text-dim);
+    font-size: 12px;
+    transition: var(--transition);
+    margin-top: 4px;
+  }
+  .add-task-row:hover { border-color: var(--border-hi); color: var(--text-muted); background: var(--surface2); }
+
+  /* ─────────────────────────────────────────────
+     MUSIC / CULTURE MODULE
+  ───────────────────────────────────────────── */
+  .culture-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .culture-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  .culture-card:hover { border-color: var(--border-hi); background: var(--surface3); }
+  .culture-thumb {
+    width: 44px; height: 44px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  .culture-meta { flex: 1; }
+  .culture-title { font-size: 13px; color: var(--text); font-weight: 500; margin-bottom: 2px; }
+  .culture-sub { font-size: 11px; color: var(--text-muted); letter-spacing: 0.03em; }
+  .culture-type {
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .type-music { background: rgba(155,122,175,0.15); color: var(--mauve-lt); }
+  .type-read  { background: rgba(184,149,100,0.15); color: var(--gold-lt); }
+  .type-film  { background: rgba(122,158,138,0.15); color: var(--sage-lt); }
+  .type-art   { background: rgba(196,122,138,0.15); color: #D4A0AC; }
+
+  /* ─────────────────────────────────────────────
+     DECISION LOG
+  ───────────────────────────────────────────── */
+  .decision-log { display: flex; flex-direction: column; gap: 10px; }
+  .decision-item {
+    padding: 14px 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    border-left: 3px solid var(--role-color);
+  }
+  .decision-q {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+  .decision-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 6px;
+  }
+  .decision-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .decision-status {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+  .status-open    { background: rgba(184,149,100,0.15); color: var(--gold-lt); }
+  .status-held    { background: rgba(122,158,138,0.15); color: var(--sage-lt); }
+  .status-resolve { background: rgba(155,122,175,0.15); color: var(--mauve-lt); }
+
+  /* ─────────────────────────────────────────────
+     RIGHT PANEL — COACH
+  ───────────────────────────────────────────── */
+  .coach-panel {
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .coach-header {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+  }
+  .coach-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .coach-subtitle {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+  .coach-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .coach-msg {
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .coach-msg.system {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-md);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-style: italic;
+    border-left: 3px solid var(--role-color);
+  }
+  .coach-msg.user {
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    margin-left: 20px;
+  }
+  .coach-msg.ai {
+    background: linear-gradient(135deg, var(--surface2), var(--surface));
+    border: 1px solid var(--border-hi);
+    color: var(--text-md);
+    margin-right: 8px;
+  }
+  .coach-reflection {
+    padding: 12px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .coach-reflection-label {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--role-color);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .coach-reflection-q {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .coach-input-area {
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .coach-textarea {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-style: italic;
+    resize: none;
+    outline: none;
+    min-height: 68px;
+    transition: border-color var(--transition);
+    line-height: 1.5;
+  }
+  .coach-textarea::placeholder { color: var(--text-dim); }
+  .coach-textarea:focus { border-color: var(--border-hi); }
+  .coach-send {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .coach-quick-prompts {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .quick-prompt {
+    padding: 3px 9px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 10px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition);
+    background: transparent;
+  }
+  .quick-prompt:hover { border-color: var(--border-hi); color: var(--role-color); }
+
+  /* ─────────────────────────────────────────────
+     GOVERNANCE PANEL
+  ───────────────────────────────────────────── */
+  .governance-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .gov-rule {
+    padding: 12px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .gov-rule-label {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+  .gov-rule-text {
+    font-size: 12px;
+    color: var(--text-md);
+    line-height: 1.55;
+  }
+  .gov-rule.hard {
+    border-left: 3px solid var(--rose);
+  }
+  .gov-rule.soft {
+    border-left: 3px solid var(--sage);
+  }
+  .gov-rule.design {
+    border-left: 3px solid var(--mauve);
+  }
+
+  /* ─────────────────────────────────────────────
+     MOTHERHOOD MODULE
+  ───────────────────────────────────────────── */
+  .memory-tiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .memory-tile {
+    padding: 14px 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  .memory-tile:hover { border-color: var(--border-hi); background: var(--surface3); }
+  .memory-tile-icon { font-size: 22px; margin-bottom: 8px; }
+  .memory-tile-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .memory-tile-sub { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+
+  /* ─────────────────────────────────────────────
+     PROGRESS / ALIGNMENT BAR
+  ───────────────────────────────────────────── */
+  .alignment-bars { display: flex; flex-direction: column; gap: 12px; }
+  .align-bar {}
+  .align-bar-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .align-bar-label { font-size: 12px; color: var(--text-md); }
+  .align-bar-pct { font-size: 11px; color: var(--text-muted); font-family: 'Cormorant Garamond', serif; }
+  .align-track {
+    height: 4px;
+    background: var(--surface3);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .align-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--role-color);
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ─────────────────────────────────────────────
+     HIDDEN MODULES (view switching)
+  ───────────────────────────────────────────── */
+  .view-section { display: none; }
+  .view-section.active { display: contents; }
+
+  /* ─────────────────────────────────────────────
+     RITUAL OVERLAY
+  ───────────────────────────────────────────── */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(12,11,9,0.88);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .ritual-modal {
+    background: var(--surface);
+    border: 1px solid var(--border-hi);
+    border-radius: var(--radius-lg);
+    width: 520px;
+    max-width: 90vw;
+    padding: 36px;
+    position: relative;
+  }
+  .ritual-modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: var(--text-muted);
+    transition: var(--transition);
+  }
+  .ritual-modal-close:hover { color: var(--text); background: var(--surface3); }
+  .ritual-modal-phase {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--role-color);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .ritual-modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .ritual-modal-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+  .ritual-steps-list { display: flex; flex-direction: column; gap: 16px; }
+  .ritual-modal-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .rms-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border-hi);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--role-color);
+    font-weight: 600;
+    flex-shrink: 0;
+    background: var(--surface2);
+  }
+  .rms-content {}
+  .rms-label { font-size: 11px; font-weight: 600; color: var(--text-md); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+  .rms-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-style: italic;
+    resize: none;
+    outline: none;
+    transition: border-color var(--transition);
+    line-height: 1.5;
+  }
+  .rms-input::placeholder { color: var(--text-dim); }
+  .rms-input:focus { border-color: var(--border-hi); }
+  .ritual-modal-footer {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .btn-close-ritual {
+    padding: 9px 20px;
+    background: var(--role-color);
+    border: none;
+    border-radius: 8px;
+    color: var(--bg);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  .btn-close-ritual:hover { opacity: 0.85; }
+
+  /* ─────────────────────────────────────────────
+     DIVIDERS & UTILITIES
+  ───────────────────────────────────────────── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 4px 0;
+  }
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .tag {
+    padding: 3px 10px;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+  .tag.hi { color: var(--role-color); border-color: var(--border-hi); }
+
+  .section-sep {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-dim);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .section-sep::before, .section-sep::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ─────────────────────────────────────────────
+     TOOLTIP
+  ───────────────────────────────────────────── */
+  [data-tip] { position: relative; }
+  [data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface3);
+    border: 1px solid var(--border-hi);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 10px;
+    color: var(--text-md);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 99;
+  }
+  [data-tip]:hover::after { opacity: 1; }
+
+  /* ─────────────────────────────────────────────
+     RESPONSIVE
+  ───────────────────────────────────────────── */
+  @media (max-width: 1200px) {
+    .shell { grid-template-columns: 180px 1fr 260px; }
+  }
+  @media (max-width: 960px) {
+    .shell { grid-template-columns: 1fr; grid-template-rows: auto; }
+    .sidebar { display: none; }
+    .coach-panel { display: none; }
+    .canvas { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell" id="shell" data-role="creator">
+
+  <!-- ─── MASTHEAD ─── -->
+  <header class="masthead">
+    <div class="masthead-brand">Vaska's <span>Creative</span> Life Space</div>
+
+    <div class="masthead-center">
+      <div class="role-pill active" data-role="creator" onclick="setRole('creator',this)">Creator</div>
+      <div class="role-pill" data-role="mother" onclick="setRole('mother',this)">Mother</div>
+      <div class="role-pill" data-role="planner" onclick="setRole('planner',this)">Planner</div>
+      <div class="role-pill" data-role="dreamer" onclick="setRole('dreamer',this)">Dreamer</div>
+      <div class="role-pill" data-role="sacred" onclick="setRole('sacred',this)">Sacred</div>
+    </div>
+
+    <div class="masthead-right">
+      <div class="time-display" id="clock">
+        <span id="clock-time">00:00</span> · <span id="clock-date">Monday</span>
+      </div>
+      <div class="ritual-btn" onclick="openRitual()">
+        <div class="dot"></div>
+        <span id="ritual-phase">Morning Ritual</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── LEFT SIDEBAR ─── -->
+  <nav class="sidebar">
+    <div class="sidebar-section-label">Workspace</div>
+    <div class="nav-item active" onclick="setView('home',this)">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M2 6.5L8 2l6 4.5V14H2V6.5z"/>
+      </svg>
+      Overview
+    </div>
+    <div class="nav-item" onclick="setView('ritual',this)">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="8" cy="8" r="5.5"/><path d="M8 5v3l2 1.5"/>
+      </svg>
+      Daily Ritual
+      <span class="nav-badge">3</span>
+    </div>
+    <div class="nav-item" onclick="setView('canvas',this)">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="1.5" y="1.5" width="13" height="13" rx="2"/>
+        <path d="M5 10l2-2 2 2 3-4"/>
+      </svg>
+      Moodboard
+    </div>
+    <div class="nav-item" onclick="setView('plan',this)">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="1.5" y="3.5" width="13" height="10" rx="1.5"/>
+        <path d="M5 1.5v4M11 1.5v4M1.5 7h13"/>
+      </svg>
+      Life Plan
+      <span class="nav-badge">5</span>
+    </div>
+    <div class="nav-item" onclick="setView('culture',this)">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="8" cy="8" r="5.5"/>
+        <path d="M6 6.5c.8-.6 1.8-.7 2.5 0 .8.8.5 2-.5 2.5S6.5 10 6.5 11"/>
+        <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+      </svg>
+      Music & Culture
+    </div>
+
+    <div class="divider" style="margin: 8px 20px;"></div>
+    <div class="sidebar-section-label">Life</div>
+
+    <div class="nav-item" onclick="setView('mother',this)">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 2c-1.2 0-2.5 1.2-2.5 3S5.8 8 8 8c1.8 0 2.5-1.2 2.5-3S9.2 2 8 2z"/>
+        <path d="M3 14c0-2.8 2.2-5 5-5s5 2.2 5 5"/>
+      </svg>
+      Motherhood
+    </div>
+    <div class="nav-item" onclick="setView('growth',this)">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 13.5V6M5 10.5C3.5 9 3 7 4.5 5.5S8 4 8 4s0 0 2 1c1.5 1 2 2.5 1 4"/>
+        <path d="M3 13.5h10"/>
+      </svg>
+      Aligned Growth
+    </div>
+    <div class="nav-item" onclick="setView('govern',this)">
+      <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 1.5L2.5 4v4c0 2.8 2.4 5.3 5.5 6 3.1-.7 5.5-3.2 5.5-6V4L8 1.5z"/>
+      </svg>
+      Governance
+    </div>
+
+    <div class="sidebar-footer">
+      <div style="font-size:10px;letter-spacing:0.08em;color:var(--text-dim);text-transform:uppercase;margin-bottom:6px;">Energy</div>
+      <div class="mood-selector">
+        <label>Mood</label>
+        <div class="mood-dot active" style="background:#7A9E8A" data-tip="Grounded" onclick="setMood(this,'grounded')"></div>
+        <div class="mood-dot" style="background:#B8956A" data-tip="Inspired" onclick="setMood(this,'inspired')"></div>
+        <div class="mood-dot" style="background:#9B7AAF" data-tip="Dreamy" onclick="setMood(this,'dreamy')"></div>
+        <div class="mood-dot" style="background:#C47A8A" data-tip="Tender" onclick="setMood(this,'tender')"></div>
+        <div class="mood-dot" style="background:#4A7A8A" data-tip="Focused" onclick="setMood(this,'focused')"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ─── MAIN CANVAS ─── -->
+  <main class="canvas" id="main-canvas">
+
+    <!-- ═══ HOME VIEW ═══ -->
+    <div class="view-section active" id="view-home">
+
+      <!-- Welcome -->
+      <div class="welcome-panel">
+        <div class="welcome-greeting" id="role-greeting">Good morning, Creator.</div>
+        <div class="welcome-heading" id="role-heading">What will you bring into being today?</div>
+        <div class="welcome-context" id="role-context">
+          Your space is curated for creative momentum. The ritual is open, three intentions are waiting, and your moodboard holds two new additions from yesterday's archive. The coach has a question for you when you're ready.
+        </div>
+        <div class="context-tags" id="role-tags">
+          <span class="ctx-tag hi">Monday energy</span>
+          <span class="ctx-tag hi">Ritual open</span>
+          <span class="ctx-tag">3 intentions set</span>
+          <span class="ctx-tag">2 aligned tasks</span>
+          <span class="ctx-tag">Music cued</span>
+        </div>
+      </div>
+
+      <!-- Grid: Ritual + Alignment -->
+      <div class="grid-2">
+
+        <!-- Morning Ritual Panel -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="8" cy="8" r="5.5"/><path d="M8 5v3l2 1.5"/>
+              </svg>
+              <span class="accent">Morning</span> Ritual
+            </div>
+            <div class="panel-actions">
+              <button class="btn-ghost" onclick="openRitual()">Open Flow</button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="ritual-flow">
+              <div class="ritual-step">
+                <div class="ritual-step-num done">✓</div>
+                <div class="ritual-step-content">
+                  <div class="ritual-step-label">Arrival</div>
+                  <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--text-md);padding:8px 12px;background:var(--surface2);border-radius:6px;border:1px solid var(--border);">"I arrive here with open hands."</div>
+                </div>
+              </div>
+              <div class="ritual-step">
+                <div class="ritual-step-num done">✓</div>
+                <div class="ritual-step-content">
+                  <div class="ritual-step-label">Intention</div>
+                  <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--text-md);padding:8px 12px;background:var(--surface2);border-radius:6px;border:1px solid var(--border);">"I want to finish the proposal draft and feel proud of it."</div>
+                </div>
+              </div>
+              <div class="ritual-step">
+                <div class="ritual-step-num">3</div>
+                <div class="ritual-step-content">
+                  <div class="ritual-step-label">One True Thing</div>
+                  <textarea class="ritual-input" rows="2" placeholder="What do you know to be true this morning?"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aligned Growth Panel -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M8 13.5V6M5 10.5C3.5 9 3 7 4.5 5.5S8 4 8 4s0 0 2 1c1.5 1 2 2.5 1 4"/>
+                <path d="M3 13.5h10"/>
+              </svg>
+              Aligned <span class="accent">Growth</span>
+            </div>
+            <div class="panel-actions">
+              <button class="btn-ghost">Edit</button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="alignment-bars">
+              <div class="align-bar">
+                <div class="align-bar-top"><span class="align-bar-label">Creative Practice</span><span class="align-bar-pct">78%</span></div>
+                <div class="align-track"><div class="align-fill" style="width:78%"></div></div>
+              </div>
+              <div class="align-bar">
+                <div class="align-bar-top"><span class="align-bar-label">Presence as Mother</span><span class="align-bar-pct">64%</span></div>
+                <div class="align-track"><div class="align-fill" style="width:64%"></div></div>
+              </div>
+              <div class="align-bar">
+                <div class="align-bar-top"><span class="align-bar-label">Beauty in Daily Life</span><span class="align-bar-pct">88%</span></div>
+                <div class="align-track"><div class="align-fill" style="width:88%"></div></div>
+              </div>
+              <div class="align-bar">
+                <div class="align-bar-top"><span class="align-bar-label">Sacred Space Practice</span><span class="align-bar-pct">42%</span></div>
+                <div class="align-track"><div class="align-fill" style="width:42%"></div></div>
+              </div>
+              <div class="align-bar">
+                <div class="align-bar-top"><span class="align-bar-label">Professional Momentum</span><span class="align-bar-pct">71%</span></div>
+                <div class="align-track"><div class="align-fill" style="width:71%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tasks Panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M3.5 8l3 3 6-6"/>
+            </svg>
+            Today's <span class="accent">Aligned Actions</span>
+          </div>
+          <div class="panel-actions">
+            <button class="btn-ghost">+ Add</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="task-list" id="task-list">
+            <div class="task-item done" onclick="toggleTask(this)">
+              <div class="task-check"><span class="task-check-icon">✓</span></div>
+              <div class="task-text">Morning ritual — intention set</div>
+              <span class="task-tag aligned">Ritual</span>
+            </div>
+            <div class="task-item" onclick="toggleTask(this)">
+              <div class="task-check"><span class="task-check-icon">✓</span></div>
+              <div class="task-text">Finish proposal draft — Section 3 results narrative</div>
+              <span class="task-tag urgent">Urgent</span>
+            </div>
+            <div class="task-item" onclick="toggleTask(this)">
+              <div class="task-check"><span class="task-check-icon">✓</span></div>
+              <div class="task-text">Add three images to moodboard — autumn palette</div>
+              <span class="task-tag aligned">Creative</span>
+            </div>
+            <div class="task-item" onclick="toggleTask(this)">
+              <div class="task-check"><span class="task-check-icon">✓</span></div>
+              <div class="task-text">Read the Ursula Le Guin essay before 3pm</div>
+              <span class="task-tag">Culture</span>
+            </div>
+            <div class="task-item" onclick="toggleTask(this)">
+              <div class="task-check"><span class="task-check-icon">✓</span></div>
+              <div class="task-text">Schedule 20-min walk with no phone</div>
+              <span class="task-tag aligned">Sacred</span>
+            </div>
+          </div>
+          <div class="add-task-row" onclick="addTask()">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M6 2v8M2 6h8"/>
+            </svg>
+            Add aligned action
+          </div>
+        </div>
+      </div>
+
+      <!-- Music & Moodboard row -->
+      <div class="grid-2">
+
+        <!-- Moodboard mini -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="1.5" y="1.5" width="13" height="13" rx="2"/>
+                <path d="M5 10l2-2 2 2 3-4"/>
+              </svg>
+              <span class="accent">Moodboard</span>
+            </div>
+            <div class="panel-actions">
+              <button class="btn-ghost" onclick="setView('canvas',document.querySelector('[onclick*=canvas]'))">Expand</button>
+            </div>
+          </div>
+          <div class="panel-body" style="padding:14px">
+            <div class="moodboard-grid">
+              <div class="mood-tile tile-amber tall">
+                <div class="mood-tile-icon">🌾</div>
+                <div class="mood-tile-label">Autumn textures</div>
+              </div>
+              <div class="mood-tile tile-mauve">
+                <div class="mood-tile-icon">🌸</div>
+                <div class="mood-tile-label">Botanicals</div>
+              </div>
+              <div class="mood-tile tile-ivory">
+                <div class="mood-tile-icon">📖</div>
+                <div class="mood-tile-label">Pages</div>
+              </div>
+              <div class="mood-tile tile-sage wide">
+                <div class="mood-tile-icon">🌿</div>
+                <div class="mood-tile-label">Morning light</div>
+              </div>
+              <div class="mood-tile tile-rose">
+                <div class="mood-tile-icon">🕯️</div>
+                <div class="mood-tile-label">Candlelight</div>
+              </div>
+              <div class="mood-tile tile-navy">
+                <div class="mood-tile-icon">🌙</div>
+                <div class="mood-tile-label">Night sky</div>
+              </div>
+              <div class="mood-tile tile-clay">
+                <div class="mood-tile-icon">🏺</div>
+                <div class="mood-tile-label">Clay forms</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Culture curation -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="8" cy="8" r="3"/><circle cx="8" cy="8" r="6.5" stroke-dasharray="2 2"/>
+              </svg>
+              Culture <span class="accent">Feed</span>
+            </div>
+            <div class="panel-actions">
+              <button class="btn-ghost">+ Curate</button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="culture-cards">
+              <div class="culture-card">
+                <div class="culture-thumb tile-mauve" style="border-radius:8px">🎵</div>
+                <div class="culture-meta">
+                  <div class="culture-title">Nils Frahm — All Melody</div>
+                  <div class="culture-sub">Playing now · Piano / Electronic</div>
+                </div>
+                <span class="culture-type type-music">Music</span>
+              </div>
+              <div class="culture-card">
+                <div class="culture-thumb tile-amber" style="border-radius:8px">📚</div>
+                <div class="culture-meta">
+                  <div class="culture-title">The Wave in the Mind — Le Guin</div>
+                  <div class="culture-sub">In progress · 62 pages left</div>
+                </div>
+                <span class="culture-type type-read">Reading</span>
+              </div>
+              <div class="culture-card">
+                <div class="culture-thumb tile-sage" style="border-radius:8px">🎬</div>
+                <div class="culture-meta">
+                  <div class="culture-title">Past Lives — 2023</div>
+                  <div class="culture-sub">Queued for tonight</div>
+                </div>
+                <span class="culture-type type-film">Film</span>
+              </div>
+              <div class="culture-card">
+                <div class="culture-thumb tile-rose" style="border-radius:8px">🖼️</div>
+                <div class="culture-meta">
+                  <div class="culture-title">Leonora Carrington retrospective</div>
+                  <div class="culture-sub">Bookmarked · Online exhibition</div>
+                </div>
+                <span class="culture-type type-art">Art</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <!-- ═══ END HOME VIEW ═══ -->
+
+    <!-- ═══ GOVERNANCE VIEW ═══ -->
+    <div class="view-section" id="view-govern">
+      <div class="welcome-panel" style="padding:24px 28px">
+        <div class="welcome-greeting">System Architecture</div>
+        <div class="welcome-heading" style="font-size:22px">Response Governance &amp; Design Rules</div>
+        <div class="welcome-context" style="font-size:12px">Hard boundaries, output protocols, and design principles that govern how this space operates and responds.</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Hard <span class="accent">Boundaries</span></div>
+        </div>
+        <div class="panel-body">
+          <div class="governance-grid">
+            <div class="gov-rule hard">
+              <div class="gov-rule-label">🔴 Hard Boundary</div>
+              <div class="gov-rule-text">Never override Vaska's stated intention or substitute a response with unsolicited advice. The system listens before it speaks.</div>
+            </div>
+            <div class="gov-rule hard">
+              <div class="gov-rule-label">🔴 Hard Boundary</div>
+              <div class="gov-rule-text">Do not generate productivity pressure. No urgency language, deadline stress-framing, or hustle-mode output without explicit role switch to Planner.</div>
+            </div>
+            <div class="gov-rule hard">
+              <div class="gov-rule-label">🔴 Hard Boundary</div>
+              <div class="gov-rule-text">Motherhood module is sacred. No efficiency framing applied to care, presence, or emotional content in that space.</div>
+            </div>
+            <div class="gov-rule hard">
+              <div class="gov-rule-label">🔴 Hard Boundary</div>
+              <div class="gov-rule-text">Coach mode does not make decisions. It reflects, questions, and holds space. Decision authority always remains with Vaska.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Output <span class="accent">Design Rules</span></div>
+        </div>
+        <div class="panel-body">
+          <div class="governance-grid">
+            <div class="gov-rule soft">
+              <div class="gov-rule-label">🟢 Output Rule</div>
+              <div class="gov-rule-text">Ritual module outputs must use reflective, first-person language. No bullet lists. Prose only. Cormorant Garamond italic when displayed.</div>
+            </div>
+            <div class="gov-rule soft">
+              <div class="gov-rule-label">🟢 Output Rule</div>
+              <div class="gov-rule-text">Moodboard curation requires at least one tactile + one temporal element per board state (texture and time of day).</div>
+            </div>
+            <div class="gov-rule soft">
+              <div class="gov-rule-label">🟢 Output Rule</div>
+              <div class="gov-rule-text">Culture Feed must curate across at least 3 media types. No more than 2 recommendations from same domain per session.</div>
+            </div>
+            <div class="gov-rule soft">
+              <div class="gov-rule-label">🟢 Output Rule</div>
+              <div class="gov-rule-text">Decision Log entries must include an open question — not a closed recommendation. Coach never closes a loop Vaska opened.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Role <span class="accent">Hierarchy Logic</span></div>
+        </div>
+        <div class="panel-body">
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+            <div style="text-align:center;padding:16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px">
+              <div style="font-size:22px;margin-bottom:8px">🎨</div>
+              <div style="font-size:11px;font-weight:600;color:var(--gold);letter-spacing:0.06em">CREATOR</div>
+              <div style="font-size:10px;color:var(--text-muted);margin-top:4px;line-height:1.5">Moodboard priority · culture feed · deep work · no interruptions</div>
+            </div>
+            <div style="text-align:center;padding:16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px">
+              <div style="font-size:22px;margin-bottom:8px">💗</div>
+              <div style="font-size:11px;font-weight:600;color:var(--rose);letter-spacing:0.06em">MOTHER</div>
+              <div style="font-size:10px;color:var(--text-muted);margin-top:4px;line-height:1.5">Presence mode · memory tiles · gentle pace · no metrics</div>
+            </div>
+            <div style="text-align:center;padding:16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px">
+              <div style="font-size:22px;margin-bottom:8px">📋</div>
+              <div style="font-size:11px;font-weight:600;color:var(--sage);letter-spacing:0.06em">PLANNER</div>
+              <div style="font-size:10px;color:var(--text-muted);margin-top:4px;line-height:1.5">Tasks priority · decisions · deadlines · aligned goals</div>
+            </div>
+            <div style="text-align:center;padding:16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px">
+              <div style="font-size:22px;margin-bottom:8px">✨</div>
+              <div style="font-size:11px;font-weight:600;color:var(--mauve);letter-spacing:0.06em">DREAMER</div>
+              <div style="font-size:10px;color:var(--text-muted);margin-top:4px;line-height:1.5">Visioning · poetry · unconstrained · future-self prompts</div>
+            </div>
+            <div style="text-align:center;padding:16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px">
+              <div style="font-size:22px;margin-bottom:8px">🕊️</div>
+              <div style="font-size:11px;font-weight:600;color:#D4C4A0;letter-spacing:0.06em">SACRED</div>
+              <div style="font-size:10px;color:var(--text-muted);margin-top:4px;line-height:1.5">Ritual only · silence · gratitude · minimal UI output</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Design <span class="accent">Principles</span></div>
+        </div>
+        <div class="panel-body">
+          <div class="governance-grid">
+            <div class="gov-rule design">
+              <div class="gov-rule-label">🟣 Design Principle</div>
+              <div class="gov-rule-text">Beauty is structural. Typography, spacing, and color are not decoration — they carry meaning and set emotional register.</div>
+            </div>
+            <div class="gov-rule design">
+              <div class="gov-rule-label">🟣 Design Principle</div>
+              <div class="gov-rule-text">Restraint over richness. When in doubt: remove a module, reduce a color, simplify a prompt. Less is the sacred gesture.</div>
+            </div>
+            <div class="gov-rule design">
+              <div class="gov-rule-label">🟣 Design Principle</div>
+              <div class="gov-rule-text">Every surface earns its presence. No module exists without a function that serves Vaska's stated life priorities.</div>
+            </div>
+            <div class="gov-rule design">
+              <div class="gov-rule-label">🟣 Design Principle</div>
+              <div class="gov-rule-text">The space must breathe. Ritual rhythms, white space, and pause states are coded as features — not absence.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ═══ END GOVERNANCE ═══ -->
+
+    <!-- ═══ MOTHERHOOD VIEW ═══ -->
+    <div class="view-section" id="view-mother">
+      <div class="welcome-panel" style="padding:24px 28px">
+        <div class="welcome-greeting">Mother Mode</div>
+        <div class="welcome-heading" style="font-size:22px">Presence over productivity.</div>
+        <div class="welcome-context" style="font-size:13px">This space holds what matters most — the small sacred moments of raising a life. No metrics here. Only memory, love, and beauty.</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><span class="accent">Beautiful Moments</span></div>
+          <div class="panel-actions"><button class="btn-ghost">+ Add Memory</button></div>
+        </div>
+        <div class="panel-body">
+          <div class="memory-tiles">
+            <div class="memory-tile">
+              <div class="memory-tile-icon">🌸</div>
+              <div class="memory-tile-title">She sang while folding laundry</div>
+              <div class="memory-tile-sub">June 20 · Made up words to a real song. Perfect chaos.</div>
+            </div>
+            <div class="memory-tile">
+              <div class="memory-tile-icon">☁️</div>
+              <div class="memory-tile-title">Cloud shapes in the park</div>
+              <div class="memory-tile-sub">June 18 · She saw a dragon and then a grandmother.</div>
+            </div>
+            <div class="memory-tile">
+              <div class="memory-tile-icon">📚</div>
+              <div class="memory-tile-title">Reading the same page four times</div>
+              <div class="memory-tile-sub">June 16 · Bedtime. She didn't want it to end.</div>
+            </div>
+            <div class="memory-tile">
+              <div class="memory-tile-icon">🍵</div>
+              <div class="memory-tile-title">Morning tea together, no hurry</div>
+              <div class="memory-tile-sub">June 14 · She held the mug with both hands.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">A <span class="accent">Letter Forward</span></div>
+        </div>
+        <div class="panel-body">
+          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:var(--text-muted);margin-bottom:12px;letter-spacing:0.04em">Write something to her, for later.</div>
+          <textarea class="ritual-input" rows="5" placeholder="Dear one,&#10;&#10;Today I want you to know that..."></textarea>
+          <div style="display:flex;justify-content:flex-end;margin-top:10px">
+            <button class="btn-accent">Archive Letter</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ═══ END MOTHERHOOD ═══ -->
+
+    <!-- ═══ GROWTH VIEW ═══ -->
+    <div class="view-section" id="view-growth">
+      <div class="welcome-panel" style="padding:24px 28px">
+        <div class="welcome-greeting">Aligned Growth</div>
+        <div class="welcome-heading" style="font-size:22px">Decision Log &amp; Intentions</div>
+        <div class="welcome-context" style="font-size:13px">Open questions, held tensions, and the threads worth following. This is not a task list — it is a thinking space.</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Open <span class="accent">Decisions</span></div>
+          <div class="panel-actions"><button class="btn-ghost">+ Log Decision</button></div>
+        </div>
+        <div class="panel-body">
+          <div class="decision-log">
+            <div class="decision-item">
+              <div class="decision-q">Do I want to build the portfolio website this summer, or would that energy be better held for the book outline?</div>
+              <div class="decision-meta">
+                <span class="decision-label">Creative direction · June 22</span>
+                <span class="decision-status status-open">Open</span>
+              </div>
+            </div>
+            <div class="decision-item" style="border-left-color:var(--sage)">
+              <div class="decision-q">The consulting role feels aligned but the pace feels rushed. Is this about the role itself or the timing?</div>
+              <div class="decision-meta">
+                <span class="decision-label">Professional · June 19</span>
+                <span class="decision-status status-held">Held</span>
+              </div>
+            </div>
+            <div class="decision-item" style="border-left-color:var(--mauve)">
+              <div class="decision-q">What would it mean to define beauty as a professional category — not aesthetic decoration but substantive expertise?</div>
+              <div class="decision-meta">
+                <span class="decision-label">Identity · June 15</span>
+                <span class="decision-status status-resolve">Deepening</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ═══ END GROWTH ═══ -->
+
+  </main>
+
+  <!-- ─── RIGHT COACH PANEL ─── -->
+  <aside class="coach-panel">
+    <div class="coach-header">
+      <div class="coach-title">The Coach</div>
+      <div class="coach-subtitle" id="coach-mode-label">Creative mode · Reflective presence</div>
+    </div>
+    <div class="coach-body" id="coach-body">
+      <div class="coach-msg system">
+        "The question is not what you do, but what kind of person you become by doing it."
+        <div style="font-size:10px;color:var(--text-dim);margin-top:6px;font-style:normal;letter-spacing:0.06em">― Le Guin (paraphrased)</div>
+      </div>
+      <div class="coach-reflection">
+        <div class="coach-reflection-label">Today's Reflection</div>
+        <div class="coach-reflection-q" id="coach-reflection">Where is your creative energy most alive right now — and what is it asking of you?</div>
+      </div>
+      <div class="coach-msg ai">
+        You've logged <strong style="color:var(--role-color)">78%</strong> on creative practice this month — strong. What I notice in your ritual entries is a recurring image of "finishing" things. I'm curious what that completion would feel like in your body, not just on a list.
+      </div>
+      <div class="coach-reflection" style="border-left:3px solid var(--mauve)">
+        <div class="coach-reflection-label" style="color:var(--mauve-lt)">Held Tension</div>
+        <div class="coach-reflection-q">You are both a woman who needs solitude to create and a mother who gives presence fully. How do you hold that without one eroding the other?</div>
+      </div>
+      <div class="coach-msg ai">
+        You don't need to resolve this. You need to honour the tension. That's different.
+      </div>
+    </div>
+    <div class="coach-input-area">
+      <div class="coach-quick-prompts">
+        <button class="quick-prompt" onclick="usePrompt('I need clarity on...')">clarity</button>
+        <button class="quick-prompt" onclick="usePrompt('I'm feeling...')">feeling</button>
+        <button class="quick-prompt" onclick="usePrompt('What I really want is...')">want</button>
+        <button class="quick-prompt" onclick="usePrompt('I notice I keep avoiding...')">avoiding</button>
+        <button class="quick-prompt" onclick="usePrompt('Something beautiful today:')">beauty</button>
+      </div>
+      <textarea class="coach-textarea" id="coach-input" rows="3" placeholder="Speak freely. This space holds whatever you bring."></textarea>
+      <div class="coach-send">
+        <span style="font-size:10px;color:var(--text-dim)">Coach does not advise — only reflects.</span>
+        <button class="btn-accent" onclick="sendCoach()">Reflect →</button>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<!-- ─── RITUAL OVERLAY ─── -->
+<div class="overlay" id="ritual-overlay">
+  <div class="ritual-modal">
+    <div class="ritual-modal-close" onclick="closeRitual()">×</div>
+    <div class="ritual-modal-phase" id="ritual-phase-label">Morning Ritual</div>
+    <div class="ritual-modal-title" id="ritual-modal-title">Begin with arrival.</div>
+    <div class="ritual-modal-sub" id="ritual-modal-sub">A ritual is not a task. It is a threshold. Cross it with care.</div>
+    <div class="ritual-steps-list">
+      <div class="ritual-modal-step">
+        <div class="rms-num">I</div>
+        <div class="rms-content">
+          <div class="rms-label">Arrive</div>
+          <textarea class="rms-input" rows="2" placeholder="I arrive here..."></textarea>
+        </div>
+      </div>
+      <div class="ritual-modal-step">
+        <div class="rms-num">II</div>
+        <div class="rms-content">
+          <div class="rms-label">Set Intention</div>
+          <textarea class="rms-input" rows="2" placeholder="Today, I intend to..."></textarea>
+        </div>
+      </div>
+      <div class="ritual-modal-step">
+        <div class="rms-num">III</div>
+        <div class="rms-content">
+          <div class="rms-label">Name One True Thing</div>
+          <textarea class="rms-input" rows="2" placeholder="What I know to be true right now..."></textarea>
+        </div>
+      </div>
+      <div class="ritual-modal-step">
+        <div class="rms-num">IV</div>
+        <div class="rms-content">
+          <div class="rms-label">What Beauty Are You Carrying?</div>
+          <textarea class="rms-input" rows="2" placeholder="Something beautiful I'm holding today..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="ritual-modal-footer">
+      <button class="btn-ghost" onclick="closeRitual()">Save &amp; Close</button>
+      <button class="btn-close-ritual" onclick="closeRitual()">Seal the Ritual</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ─────────────────────────────────────────────
+  // CLOCK
+  // ─────────────────────────────────────────────
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    document.getElementById('clock-time').textContent = `${h}:${m}`;
+    document.getElementById('clock-date').textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
+
+    // Ritual phase by time
+    const hour = now.getHours();
+    let phase = 'Morning Ritual';
+    if (hour >= 12 && hour < 17) phase = 'Afternoon Check-in';
+    else if (hour >= 17 && hour < 21) phase = 'Evening Close';
+    else if (hour >= 21) phase = 'Night Reflection';
+    document.getElementById('ritual-phase').textContent = phase;
+    document.getElementById('ritual-phase-label').textContent = phase;
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+
+  // ─────────────────────────────────────────────
+  // ROLE SWITCHING
+  // ─────────────────────────────────────────────
+  const roleData = {
+    creator: {
+      greeting: 'Good morning, Creator.',
+      heading: 'What will you bring into being today?',
+      context: 'Your space is curated for creative momentum. The ritual is open, three intentions are waiting, and your moodboard holds two new additions. The coach has a question when you\'re ready.',
+      tags: ['Monday energy','Ritual open','3 intentions set','2 aligned tasks','Music cued'],
+      coachLabel: 'Creative mode · Reflective presence',
+      reflection: 'Where is your creative energy most alive right now — and what is it asking of you?',
+      ritualTitle: 'Begin with arrival.',
+      ritualSub: 'A ritual is not a task. It is a threshold. Cross it with care.'
+    },
+    mother: {
+      greeting: 'Mother mode.',
+      heading: 'Presence is the whole practice.',
+      context: 'No metrics here. No efficiency. Only the beautiful weight of being needed and the grace of showing up fully.',
+      tags: ['Presence','Beautiful moments','4 memories this week','Letter archive open'],
+      coachLabel: 'Mother mode · Tender holding',
+      reflection: 'What small moment today deserves to be named beautiful?',
+      ritualTitle: 'Arrive as mother.',
+      ritualSub: 'Set down what you were before walking through this door.'
+    },
+    planner: {
+      greeting: 'Planner mode.',
+      heading: 'What needs to move today?',
+      context: 'Five aligned actions. Two open decisions. One deadline. Your energy is available — let\'s use it with intention, not urgency.',
+      tags: ['5 tasks open','2 decisions pending','Week in view','Energy: grounded'],
+      coachLabel: 'Planner mode · Structured focus',
+      reflection: 'Of everything demanding your attention, which one — if done today — would create the most ease tomorrow?',
+      ritualTitle: 'Set the field.',
+      ritualSub: 'Plan from values, not from pressure.'
+    },
+    dreamer: {
+      greeting: 'Dreamer mode.',
+      heading: 'What does your future self know that you don\'t yet?',
+      context: 'No tasks. No deadlines. Only vision, possibility, and the deep knowing that something beautiful is becoming.',
+      tags: ['Visioning active','Future self letters','3 seeds planted','Unconstrained'],
+      coachLabel: 'Dreamer mode · Expansive space',
+      reflection: 'If you trusted that everything you need is already in motion — what would you allow yourself to want?',
+      ritualTitle: 'Enter the dream.',
+      ritualSub: 'There are no wrong answers here. Only true ones.'
+    },
+    sacred: {
+      greeting: 'Sacred space.',
+      heading: 'Be still.',
+      context: 'This mode speaks softly. It holds silence, gratitude, and the invisible thread between who you are and who you are becoming.',
+      tags: ['Silence mode','Gratitude open','Minimal output'],
+      coachLabel: 'Sacred mode · Silent witness',
+      reflection: 'What are you grateful for that you haven\'t said out loud yet?',
+      ritualTitle: 'Enter silence.',
+      ritualSub: 'Nothing to do. Nothing to prove. Simply be here.'
+    }
+  };
+
+  function setRole(role, el) {
+    const shell = document.getElementById('shell');
+    shell.setAttribute('data-role', role);
+
+    // Update pills
+    document.querySelectorAll('.role-pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+
+    // Update content
+    const d = roleData[role];
+    document.getElementById('role-greeting').textContent = d.greeting;
+    document.getElementById('role-heading').textContent = d.heading;
+    document.getElementById('role-context').textContent = d.context;
+    document.getElementById('coach-mode-label').textContent = d.coachLabel;
+    document.getElementById('coach-reflection').textContent = d.reflection;
+    document.getElementById('ritual-modal-title').textContent = d.ritualTitle;
+    document.getElementById('ritual-modal-sub').textContent = d.ritualSub;
+
+    const tagsEl = document.getElementById('role-tags');
+    tagsEl.innerHTML = d.tags.map((t,i) => `<span class="ctx-tag ${i<2?'hi':''}">${t}</span>`).join('');
+
+    // Auto-switch to mother view
+    if (role === 'mother') {
+      setView('mother', document.querySelector('[onclick*=mother]'));
+    } else if (role === 'sacred' || role === 'dreamer') {
+      setView('ritual', document.querySelector('[onclick*=ritual]') || {});
+    } else {
+      setView('home', document.querySelector('.nav-item'));
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // VIEW SWITCHING
+  // ─────────────────────────────────────────────
+  function setView(view, el) {
+    document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+    const target = document.getElementById(`view-${view}`);
+    if (target) target.classList.add('active');
+    if (el && el.classList) el.classList.add('active');
+  }
+
+  // ─────────────────────────────────────────────
+  // TASK TOGGLE
+  // ─────────────────────────────────────────────
+  function toggleTask(el) {
+    el.classList.toggle('done');
+  }
+
+  function addTask() {
+    const text = prompt('New aligned action:');
+    if (!text) return;
+    const list = document.getElementById('task-list');
+    const item = document.createElement('div');
+    item.className = 'task-item';
+    item.onclick = () => item.classList.toggle('done');
+    item.innerHTML = `<div class="task-check"><span class="task-check-icon">✓</span></div><div class="task-text">${text}</div><span class="task-tag aligned">New</span>`;
+    list.appendChild(item);
+  }
+
+  // ─────────────────────────────────────────────
+  // MOOD SELECTOR
+  // ─────────────────────────────────────────────
+  function setMood(el, mood) {
+    document.querySelectorAll('.mood-dot').forEach(d => d.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // ─────────────────────────────────────────────
+  // RITUAL OVERLAY
+  // ─────────────────────────────────────────────
+  function openRitual() {
+    document.getElementById('ritual-overlay').classList.add('open');
+  }
+  function closeRitual() {
+    document.getElementById('ritual-overlay').classList.remove('open');
+  }
+  document.getElementById('ritual-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeRitual();
+  });
+
+  // ─────────────────────────────────────────────
+  // COACH
+  // ─────────────────────────────────────────────
+  const coachResponses = {
+    default: [
+      "What you just said — say it again, but slower. What word carries the most weight?",
+      "I notice you used the word 'should'. What would happen if you replaced it with 'want'?",
+      "What would it mean to trust yourself on this completely?",
+      "That sounds like something you've known for a while. When did you first know it?",
+      "What's underneath that? Not the story — the feeling.",
+      "Where do you feel that in your body right now?",
+    ],
+    clarity: [
+      "Clarity rarely arrives before we act. What is the smallest step you could take that would give you information?",
+    ],
+    feeling: [
+      "Thank you for naming that. It takes courage to say what you actually feel. Stay with it a moment.",
+    ],
+    beauty: [
+      "Beauty is data. Your attention to it is not indulgence — it is intelligence. What is it telling you?",
+    ],
+    want: [
+      "That wanting is important. Don't rush past it. What does this want feel like — is it quiet and steady, or urgent and bright?",
+    ],
+    avoiding: [
+      "The thing we avoid is usually the most important thing. What would it cost you to stop avoiding it? What might it give you?",
+    ]
+  };
+
+  function usePrompt(text) {
+    const input = document.getElementById('coach-input');
+    input.value = text;
+    input.focus();
+  }
+
+  function sendCoach() {
+    const input = document.getElementById('coach-input');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const body = document.getElementById('coach-body');
+
+    // User message
+    const userMsg = document.createElement('div');
+    userMsg.className = 'coach-msg user';
+    userMsg.textContent = text;
+    body.appendChild(userMsg);
+
+    // AI response
+    setTimeout(() => {
+      const aiMsg = document.createElement('div');
+      aiMsg.className = 'coach-msg ai';
+
+      let pool = coachResponses.default;
+      const lc = text.toLowerCase();
+      if (lc.includes('clarity')) pool = coachResponses.clarity;
+      else if (lc.includes('feel')) pool = coachResponses.feeling;
+      else if (lc.includes('beautiful') || lc.includes('beauty')) pool = coachResponses.beauty;
+      else if (lc.includes('want')) pool = coachResponses.want;
+      else if (lc.includes('avoid')) pool = coachResponses.avoiding;
+
+      aiMsg.textContent = pool[Math.floor(Math.random() * pool.length)];
+      body.appendChild(aiMsg);
+      body.scrollTop = body.scrollHeight;
+    }, 700);
+
+    input.value = '';
+    body.scrollTop = body.scrollHeight;
+  }
+
+  document.getElementById('coach-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendCoach(); }
+  });
+
+  // ─────────────────────────────────────────────
+  // ANIMATE PROGRESS BARS ON LOAD
+  // ─────────────────────────────────────────────
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.align-fill').forEach(el => {
+      const w = el.style.width;
+      el.style.width = '0';
+      setTimeout(() => { el.style.width = w; }, 200);
+    });
+  });
+</script>
+</body>
+</html>

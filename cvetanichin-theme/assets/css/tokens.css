@@ -1,0 +1,132 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Cvetanichin Design System — Unified Token File
+   All design tokens for the WordPress theme.
+   Domain themes (consultancy.css / selfimprovement.css) override
+   the semantic layer — load ONE after this file.
+   ───────────────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200..400;1,9..144,200..400&family=Outfit:wght@300;400;500;600&display=swap');
+
+:root {
+
+  /* ── Font Families ──────────────────────────────────────────────────── */
+  --font-serif:    'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans:     'Outfit', system-ui, -apple-system, sans-serif;
+  --font-display:  var(--font-serif);
+  --font-body:     var(--font-sans);
+  --font-ui:       var(--font-sans);
+  --font-label:    var(--font-sans);
+
+  /* ── Type Scale ─────────────────────────────────────────────────────── */
+  --text-xs:      10px;
+  --text-sm:      11px;
+  --text-base:    13px;
+  --text-md:      14px;
+  --text-lg:      15px;
+  --text-xl:      21px;
+  --text-2xl:     28px;
+  --text-3xl:     32px;
+  --text-4xl:     38px;
+  --text-5xl:     48px;
+  --text-display: clamp(48px, 5.5vw, 72px);
+
+  /* ── Line Heights ───────────────────────────────────────────────────── */
+  --leading-tight:   1.0;
+  --leading-snug:    1.15;
+  --leading-normal:  1.55;
+  --leading-relaxed: 1.75;
+  --leading-loose:   1.9;
+
+  /* ── Letter Spacing ─────────────────────────────────────────────────── */
+  --tracking-tight:   -0.02em;
+  --tracking-normal:   0em;
+  --tracking-wide:     0.06em;
+  --tracking-wider:    0.10em;
+  --tracking-widest:   0.25em;
+
+  /* ── Font Weights ───────────────────────────────────────────────────── */
+  --weight-light:    300;
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+
+  /* ── Spacing — 4px grid ─────────────────────────────────────────────── */
+  --space-1:   4px;  --space-2:  8px;  --space-3:  12px; --space-4:  16px;
+  --space-5:  20px;  --space-6: 24px;  --space-8:  32px; --space-10: 40px;
+  --space-12: 48px;  --space-14:56px;  --space-16: 64px; --space-20: 80px;
+  --space-24: 96px;
+
+  /* ── Section Rhythm ─────────────────────────────────────────────────── */
+  --section-pad-x: 3.5rem;
+  --section-pad-y: 5rem;
+  --section-gap:   4rem;
+  --gap-xs:  0.25rem; --gap-sm: 0.6rem; --gap-md: 1rem;
+  --gap-lg:  1.25rem; --gap-xl: 2rem;   --gap-2xl: 2.5rem; --gap-3xl: 3.5rem;
+
+  /* ── Text Constraints ───────────────────────────────────────────────── */
+  --max-text-narrow: 300px;
+  --max-text-body:   480px;
+  --max-text-quote:  600px;
+  --max-layout:     1280px;
+
+  /* ── Border Radius ──────────────────────────────────────────────────── */
+  --radius-none: 0px;
+  --radius-sm:   2px;
+  --radius-full: 9999px;
+
+  /* ── Border Widths ──────────────────────────────────────────────────── */
+  --border-hairline: 0.5px;
+  --border-thin:     1px;
+
+  /* ── Shadows ────────────────────────────────────────────────────────── */
+  --shadow-none: none;
+  --shadow-sm:   0 1px 8px  rgba(45,45,45,0.05);
+  --shadow-md:   0 1px 24px rgba(45,45,45,0.07);
+  --shadow-warm: 0 4px 24px rgba(160,85,85,0.08);
+
+  /* ── Transitions ────────────────────────────────────────────────────── */
+  --transition-fast:   all 0.20s ease;
+  --transition-base:   all 0.25s ease;
+  --transition-reveal: opacity 0.7s ease, transform 0.7s ease;
+  --transition-slow:   opacity 0.8s ease, transform 0.8s ease;
+
+  /* ── Base Colour Primitives (Self-Improvement defaults) ─────────────── */
+  --color-pink:        #E55381;
+  --color-pink-deep:   #C23368;
+  --color-pink-light:  #EFA9AE;
+  --color-pink-pale:   #FCE8EE;
+  --color-deep:        #190828;
+  --color-mauve:       #685762;
+  --color-sage:        #9B9987;
+  --color-surface:     #F5F0F1;
+  --color-surface-alt: #F8E0E2;
+  --color-surface-mid: #EDE5E6;
+  --color-white:       #FDF8F9;
+
+  /* ── Semantic Aliases (default = Self-Improvement) ──────────────────── */
+  --surface-base:    var(--color-surface);
+  --surface-subtle:  var(--color-surface-alt);
+  --surface-muted:   var(--color-surface-mid);
+  --surface-inverse: var(--color-deep);
+  --surface-white:   var(--color-white);
+  --surface-accent:  var(--color-pink);
+
+  --text-primary:   var(--color-deep);
+  --text-secondary: var(--color-mauve);
+  --text-muted:     var(--color-sage);
+  --text-inverse:   var(--color-white);
+  --text-accent:    var(--color-pink-deep);
+
+  --accent-primary: var(--color-pink);
+  --accent-light:   var(--color-pink-light);
+  --accent-deep:    var(--color-pink-deep);
+  --accent-pale:    var(--color-pink-pale);
+  --accent-fg:      var(--surface-white);
+
+  --border-subtle:    rgba(229,83,129,0.13);
+  --border-emphasis:  rgba(229,83,129,0.20);
+  --border-strong:    rgba(229,83,129,0.32);
+  --border-accent:    rgba(229,83,129,0.55);
+  --border-inverse:   rgba(253,248,249,0.07);
+  --border-hair:      0.5px;
+}
