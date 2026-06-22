@@ -1,0 +1,29 @@
+/* Cvetanichin — Domain 2: Self-Improvement Theme
+   Hot pink · blush · deep purple — B2C digital products */
+
+:root {
+  --surface-base:    #F5F0F1;
+  --surface-subtle:  #F8E0E2;
+  --surface-muted:   #EDE5E6;
+  --surface-inverse: #190828;
+  --surface-white:   #FDF8F9;
+  --surface-accent:  #E55381;
+
+  --text-primary:   #190828;
+  --text-secondary: #685762;
+  --text-muted:     #9B9987;
+  --text-inverse:   #FDF8F9;
+  --text-accent:    #C23368;
+
+  --accent-primary: #E55381;
+  --accent-light:   #EFA9AE;
+  --accent-deep:    #C23368;
+  --accent-pale:    #FCE8EE;
+  --accent-fg:      #FDF8F9;
+
+  --border-subtle:   rgba(229,83,129,0.13);
+  --border-emphasis: rgba(229,83,129,0.20);
+  --border-strong:   rgba(229,83,129,0.32);
+  --border-accent:   rgba(229,83,129,0.55);
+  --border-inverse:  rgba(253,248,249,0.07);
+}

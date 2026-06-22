@@ -1,0 +1,5 @@
+/* Cvetanichin Widgets — minimal structural styles
+   Visual styles are all inline (tokens-dependent) */
+.cvw-widget { font-family: var(--font-body, 'Outfit', sans-serif); }
+.cvw-widget p { max-width: none; margin-bottom: 0; }
+.cvw-widget input[type="email"]:focus { outline: none; }
