@@ -20,21 +20,21 @@ $cta2_url = get_post_meta( $post_id, 'hero_cta2_url', true ) ?: home_url( '/digi
   <div class="cv-hero__inner cv-container">
 
     <div class="cv-hero__content">
-      <p class="cv-eyebrow cv-eyebrow--on-dark cv-reveal"><?php echo esc_html( $eyebrow ); ?></p>
+      <p class="cv-eyebrow cv-eyebrow--on-dark cv-reveal" data-meta-key="hero_eyebrow" data-field-type="text"><?php echo esc_html( $eyebrow ); ?></p>
 
-      <h1 id="cv-hero-heading" class="cv-hero__name cv-reveal cv-reveal--delay-1">
+      <h1 id="cv-hero-heading" class="cv-hero__name cv-reveal cv-reveal--delay-1" data-meta-key="hero_headline" data-field-type="text">
         <?php echo esc_html( $headline ); ?>
       </h1>
 
-      <p class="cv-hero__tagline cv-reveal cv-reveal--delay-2">
+      <p class="cv-hero__tagline cv-reveal cv-reveal--delay-2" data-meta-key="hero_tagline" data-field-type="textarea">
         <?php echo wp_kses_post( $tagline ); ?>
       </p>
 
       <div class="cv-hero__actions cv-reveal cv-reveal--delay-3">
-        <a href="<?php echo esc_url( $cta1_url ); ?>" class="cv-btn cv-btn--outline-inverse">
+        <a href="<?php echo esc_url( $cta1_url ); ?>" class="cv-btn cv-btn--outline-inverse" data-meta-key="hero_cta1_label" data-field-type="text">
           <?php echo esc_html( $cta1_label ); ?>
         </a>
-        <a href="<?php echo esc_url( $cta2_url ); ?>" class="cv-btn cv-btn--ghost-inverse">
+        <a href="<?php echo esc_url( $cta2_url ); ?>" class="cv-btn cv-btn--ghost-inverse" data-meta-key="hero_cta2_label" data-field-type="text">
           <?php echo esc_html( $cta2_label ); ?>
         </a>
       </div>
@@ -49,6 +49,8 @@ $cta2_url = get_post_meta( $post_id, 'hero_cta2_url', true ) ?: home_url( '/digi
           width="440"
           height="550"
           loading="eager"
+          data-meta-key="hero_portrait"
+          data-field-type="image"
         />
       </div>
     </div>

@@ -1,0 +1,269 @@
+/**
+ * Cvetanichin Theme — Front-End Inline Editor Styles
+ * Styling for pencil icons, edit mode, and control buttons
+ */
+
+/* ── Editable Elements ──────────────────────────────────────────────────── */
+.cv-editable {
+  position: relative;
+  cursor: pointer;
+}
+
+/* Pencil icon on hover */
+.cv-editable:not(.cv-editing):hover::before {
+  content: '✏';
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--role-color, #B8956A);
+  color: white;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 101;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.cv-editable:hover::before {
+  transform: scale(1.1);
+}
+
+/* ── Editing State ────────────────────────────────────────────────────────── */
+.cv-editing {
+  background: var(--surface2, #1C1915);
+  border: 2px solid var(--role-color, #B8956A);
+  padding: 12px;
+  border-radius: var(--radius, 10px);
+  min-height: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Editor Input Fields ────────────────────────────────────────────────── */
+.cv-editor-input {
+  background: var(--surface, #141210);
+  color: var(--text, #F0EAE0);
+  border: 1px solid var(--border-hi, rgba(184, 149, 100, 0.28));
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  transition: border-color 0.2s ease;
+}
+
+.cv-editor-input:focus {
+  outline: none;
+  border-color: var(--role-color, #B8956A);
+  box-shadow: 0 0 0 2px rgba(184, 149, 100, 0.1);
+}
+
+.cv-editor-textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── Editor Controls ──────────────────────────────────────────────────────– */
+.cv-editor-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.cv-editor-button {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.cv-editor-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cv-editor-button:active {
+  transform: translateY(0);
+}
+
+/* Save button */
+.cv-editor-save {
+  background: var(--role-color, #B8956A);
+  color: white;
+}
+
+.cv-editor-save:hover {
+  background: var(--role-color-lt, #D4B48C);
+}
+
+/* Cancel button */
+.cv-editor-cancel {
+  background: var(--text-muted, #7A746C);
+  color: var(--text, #F0EAE0);
+}
+
+.cv-editor-cancel:hover {
+  background: var(--text-dim, #4A443E);
+}
+
+/* ── Loading State ───────────────────────────────────────────────────────── */
+.cv-editor-loading .cv-editor-button {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.cv-editor-loading .cv-editor-save::after {
+  content: ' ⟳';
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Success State ───────────────────────────────────────────────────────── */
+.cv-editor-success {
+  background: var(--role-glow, rgba(184, 149, 100, 0.06)) !important;
+}
+
+.cv-editor-success::after {
+  content: '✓ Saved';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--role-color, #B8956A);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  z-index: 102;
+  animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  10% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  90% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+}
+
+/* ── Responsive Adjustments ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .cv-editable:hover::before {
+    right: -12px;
+    top: -12px;
+  }
+
+  .cv-editor-controls {
+    flex-wrap: wrap;
+  }
+
+  .cv-editor-button {
+    flex: 1;
+    min-width: 80px;
+  }
+}
+
+/* ── Specific Field Type Adjustments ──────────────────────────────────────– */
+
+/* Headings (h1, h2, h3) */
+h1.cv-editable,
+h2.cv-editable,
+h3.cv-editable {
+  display: inline-block;
+}
+
+h1.cv-editing,
+h2.cv-editing,
+h3.cv-editing {
+  display: block;
+}
+
+/* Paragraphs */
+p.cv-editable {
+  display: block;
+}
+
+p.cv-editing {
+  padding: 12px;
+}
+
+/* Images */
+img.cv-editable {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+}
+
+img.cv-editing {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 2px solid var(--role-color, #B8956A);
+  padding: 8px;
+  border-radius: var(--radius, 10px);
+}
+
+/* Preserve text wrapping in edit mode */
+.cv-editing .cv-editor-textarea {
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+/* ── Accessibility ──────────────────────────────────────────────────────── */
+.cv-editor-button:focus-visible {
+  outline: 2px solid var(--role-color, #B8956A);
+  outline-offset: 2px;
+}
+
+.cv-editor-input:focus-visible {
+  outline: 2px solid var(--role-color, #B8956A);
+  outline-offset: 2px;
+}
+
+/* Hide pencil icon for screen readers and improve keyboard navigation */
+@media (prefers-reduced-motion: reduce) {
+  .cv-editable:hover::before,
+  .cv-editor-button,
+  .cv-editor-input {
+    transition: none;
+  }
+
+  .cv-editor-save::after {
+    animation: none;
+  }
+}

@@ -25,9 +25,9 @@ if ( empty( $stats ) ) {
 
     <div class="cv-ws-grid cv-reveal">
       <div class="cv-ws-content">
-        <p class="cv-eyebrow cv-eyebrow--rose"><?php echo wp_kses_post( $eyebrow ); ?></p>
-        <h2 id="cv-ws-heading"><?php echo wp_kses_post( $headline ); ?></h2>
-        <p>
+        <p class="cv-eyebrow cv-eyebrow--rose" data-meta-key="domain_workspace_eyebrow" data-field-type="text"><?php echo wp_kses_post( $eyebrow ); ?></p>
+        <h2 id="cv-ws-heading" data-meta-key="domain_workspace_headline" data-field-type="text"><?php echo wp_kses_post( $headline ); ?></h2>
+        <p data-meta-key="domain_workspace_paragraph" data-field-type="textarea">
           <?php echo wp_kses_post( $paragraph ); ?>
         </p>
         <a href="<?php echo esc_url( home_url( '/digital-workspace/' ) ); ?>" class="cv-btn cv-btn--primary">

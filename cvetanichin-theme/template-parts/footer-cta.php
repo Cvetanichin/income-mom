@@ -19,11 +19,11 @@ $link2_url = get_post_meta( $post_id, 'footer_cta_link2_url', true ) ?: 'https:/
     <div class="cv-fcta-inner cv-reveal">
 
       <div class="cv-fcta-content">
-        <p class="cv-eyebrow"><?php echo esc_html( $eyebrow ); ?></p>
-        <h2 id="cv-fcta-heading">
+        <p class="cv-eyebrow" data-meta-key="footer_cta_eyebrow" data-field-type="text"><?php echo esc_html( $eyebrow ); ?></p>
+        <h2 id="cv-fcta-heading" data-meta-key="footer_cta_headline" data-field-type="text">
           <?php echo wp_kses_post( $headline ); ?>
         </h2>
-        <p>
+        <p data-meta-key="footer_cta_paragraph" data-field-type="textarea">
           <?php echo wp_kses_post( $paragraph ); ?>
         </p>
       </div>

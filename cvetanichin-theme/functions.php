@@ -775,6 +775,110 @@ function cvetanichin_get_widget_output( $type, $options = [] ) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
+// FRONT-END INLINE EDITOR — Smart field editing with pencil icons
+// ─────────────────────────────────────────────────────────────────────────
+
+function cvetanichin_sanitize_field( $field_key, $value ) {
+    // Text fields (headlines, eyebrows, labels)
+    if ( strpos( $field_key, '_headline' ) !== false ||
+         strpos( $field_key, '_eyebrow' ) !== false ||
+         strpos( $field_key, '_label' ) !== false ) {
+        return sanitize_text_field( $value );
+    }
+
+    // Textarea/rich text (descriptions, paragraphs, bios)
+    if ( strpos( $field_key, '_tagline' ) !== false ||
+         strpos( $field_key, '_lead' ) !== false ||
+         strpos( $field_key, '_description' ) !== false ||
+         strpos( $field_key, '_paragraph' ) !== false ||
+         strpos( $field_key, '_intro' ) !== false ||
+         strpos( $field_key, '_approach' ) !== false ||
+         strpos( $field_key, '_about' ) !== false ||
+         strpos( $field_key, '_quote' ) !== false ||
+         strpos( $field_key, '_bio' ) !== false ||
+         strpos( $field_key, '_features' ) !== false ||
+         strpos( $field_key, '_console' ) !== false ) {
+        return wp_kses_post( $value );
+    }
+
+    // Image URLs
+    if ( strpos( $field_key, '_image' ) !== false ||
+         strpos( $field_key, '_portrait' ) !== false ) {
+        return esc_url_raw( $value );
+    }
+
+    // URLs (links, CTAs, Gumroad)
+    if ( strpos( $field_key, '_url' ) !== false ||
+         strpos( $field_key, 'gumroad' ) !== false ) {
+        return esc_url_raw( $value );
+    }
+
+    // Default: sanitize as text
+    return sanitize_text_field( $value );
+}
+
+function cvetanichin_save_field() {
+    check_ajax_referer( 'cvetanichin_edit_nonce' );
+
+    if ( ! is_user_logged_in() ) {
+        wp_send_json_error( __( 'Not authenticated', 'cvetanichin' ) );
+    }
+
+    $post_id   = absint( $_POST['post_id'] ?? 0 );
+    $field_key = sanitize_key( $_POST['field_key'] ?? '' );
+    $field_value = $_POST['field_value'] ?? '';
+
+    $post = get_post( $post_id );
+    if ( ! $post || ! current_user_can( 'edit_post', $post_id ) ) {
+        wp_send_json_error( __( 'Cannot edit this post', 'cvetanichin' ) );
+    }
+
+    if ( empty( $field_key ) ) {
+        wp_send_json_error( __( 'Invalid field', 'cvetanichin' ) );
+    }
+
+    $sanitized_value = cvetanichin_sanitize_field( $field_key, $field_value );
+    update_post_meta( $post_id, $field_key, $sanitized_value );
+
+    wp_send_json_success( [
+        'field_key' => $field_key,
+        'field_value' => $sanitized_value,
+        'message' => __( 'Field updated successfully', 'cvetanichin' )
+    ] );
+}
+add_action( 'wp_ajax_cvetanichin_save_field', 'cvetanichin_save_field' );
+
+function cvetanichin_enqueue_frontend_editor() {
+    if ( ! is_user_logged_in() ) {
+        return;
+    }
+
+    wp_enqueue_script(
+        'cvetanichin-frontend-editor',
+        CVETANICHIN_URI . '/assets/js/frontend-editor.js',
+        [ 'jquery', 'media-upload' ],
+        CVETANICHIN_VERSION,
+        true
+    );
+
+    wp_enqueue_style(
+        'cvetanichin-frontend-editor',
+        CVETANICHIN_URI . '/assets/css/frontend-editor.css',
+        [],
+        CVETANICHIN_VERSION
+    );
+
+    wp_enqueue_media();
+
+    wp_localize_script( 'cvetanichin-frontend-editor', 'cvetanichinedit', [
+        'ajaxurl' => admin_url( 'admin-ajax.php' ),
+        'nonce' => wp_create_nonce( 'cvetanichin_edit_nonce' ),
+        'postid' => get_the_ID()
+    ] );
+}
+add_action( 'wp_enqueue_scripts', 'cvetanichin_enqueue_frontend_editor', 25 );
+
+// ─────────────────────────────────────────────────────────────────────────
 // Load plugin file if active
 // ─────────────────────────────────────────────────────────────────────────
 if ( file_exists( WP_PLUGIN_DIR . '/cvetanichin-widgets/cvetanichin-widgets.php' ) ) {
