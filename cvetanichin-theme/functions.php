@@ -245,28 +245,67 @@ add_filter( 'excerpt_more', 'cvetanichin_excerpt_more' );
 // ─────────────────────────────────────────────────────────────────────────
 
 function cvetanichin_register_page_meta_boxes() {
-    $pages = [ 'front-page', 'page-consultancy', 'page-selfimprovement' ];
+    $screen = get_current_screen();
+    if ( ! $screen || $screen->post_type !== 'page' ) {
+        return;
+    }
 
-    foreach ( $pages as $page ) {
+    global $post;
+    if ( ! $post ) {
+        return;
+    }
+
+    $template = get_page_template_slug( $post->ID );
+
+    // Front page template
+    if ( 'front-page.php' === $template || is_front_page() ) {
         add_meta_box(
-            'cvetanichin_' . $page . '_fields',
+            'cvetanichin_front_page_fields',
             __( 'Edit Page Content', 'cvetanichin' ),
-            'cvetanichin_render_' . $page . '_metabox',
+            'cvetanichin_render_front_page_metabox',
             'page',
             'normal',
             'high'
         );
     }
 
-    add_meta_box(
-        'cvetanichin_console_fields',
-        __( 'Vas Digital Console Settings', 'cvetanichin' ),
-        'cvetanichin_render_console_metabox',
-        'page',
-        'normal',
-        'high'
-    );
+    // Consultancy page template
+    if ( 'page-consultancy.php' === $template ) {
+        add_meta_box(
+            'cvetanichin_consultancy_fields',
+            __( 'Edit Page Content', 'cvetanichin' ),
+            'cvetanichin_render_page_consultancy_metabox',
+            'page',
+            'normal',
+            'high'
+        );
+    }
 
+    // Self-improvement page template
+    if ( 'page-selfimprovement.php' === $template ) {
+        add_meta_box(
+            'cvetanichin_selfimprovement_fields',
+            __( 'Edit Page Content', 'cvetanichin' ),
+            'cvetanichin_render_page_selfimprovement_metabox',
+            'page',
+            'normal',
+            'high'
+        );
+    }
+
+    // Console page template
+    if ( 'page-templates/template-console.php' === $template ) {
+        add_meta_box(
+            'cvetanichin_console_fields',
+            __( 'Vas Digital Console Settings', 'cvetanichin' ),
+            'cvetanichin_render_console_metabox',
+            'page',
+            'normal',
+            'high'
+        );
+    }
+
+    // Page widgets (available on all page templates)
     add_meta_box(
         'cvetanichin_page_widgets',
         __( 'Page Side Widgets', 'cvetanichin' ),
@@ -505,11 +544,19 @@ function cvetanichin_save_page_meta( $post_id ) {
             $count = (int) $_POST[ $field . '_count' ];
             for ( $i = 0; $i < $count; $i++ ) {
                 $row = [];
+                $has_data = false;
                 foreach ( $subfields as $sub ) {
                     $key = $field . '_' . $i . '_' . $sub;
-                    $row[ $sub ] = isset( $_POST[ $key ] ) ? sanitize_text_field( $_POST[ $key ] ) : '';
+                    $value = isset( $_POST[ $key ] ) ? sanitize_text_field( $_POST[ $key ] ) : '';
+                    $row[ $sub ] = $value;
+                    if ( ! empty( $value ) ) {
+                        $has_data = true;
+                    }
                 }
-                $repeater_data[] = $row;
+                // Only add row if it has at least some data
+                if ( $has_data ) {
+                    $repeater_data[] = $row;
+                }
             }
         }
         update_post_meta( $post_id, $field, $repeater_data );
@@ -553,16 +600,16 @@ function cvetanichin_field( $type, $key, $label, $post_id ) {
 function cvetanichin_repeater_services( $key, $label, $post_id, $max = 3 ) {
     $data = get_post_meta( $post_id, $key, true );
     $data = is_array( $data ) ? $data : [];
+    $count = min( count( $data ) + 1, $max );
     ?>
     <div class="cvetanichin-repeater" style="margin-bottom:15px;border:1px solid #ddd;padding:10px;">
         <strong><?php echo esc_html( $label ); ?></strong>
         <div class="cvetanichin-repeater-items">
             <?php
-            for ( $i = 0; $i < min( count( $data ) + 1, $max + 1 ); $i++ ) {
+            for ( $i = 0; $i < $count; $i++ ) {
                 $item = isset( $data[ $i ] ) ? $data[ $i ] : [];
                 ?>
                 <div class="cvetanichin-repeater-item" style="border-top:1px solid #eee;padding:10px;margin-top:10px;">
-                    <input type="hidden" name="<?php echo esc_attr( $key . '_' . $i . '_count' ); ?>" value="<?php echo esc_attr( $i ); ?>" />
                     <input type="text" name="<?php echo esc_attr( $key . '_' . $i . '_title' ); ?>" placeholder="Title" value="<?php echo esc_attr( $item['title'] ?? '' ); ?>" style="width:100%;padding:5px;margin-bottom:5px;" />
                     <textarea name="<?php echo esc_attr( $key . '_' . $i . '_description' ); ?>" placeholder="Description" rows="3" style="width:100%;padding:5px;margin-bottom:5px;font-family:monospace;"><?php echo esc_textarea( $item['description'] ?? '' ); ?></textarea>
                     <input type="hidden" name="<?php echo esc_attr( $key . '_' . $i . '_image' ); ?>" value="<?php echo esc_attr( $item['image'] ?? '' ); ?>" />
@@ -572,7 +619,7 @@ function cvetanichin_repeater_services( $key, $label, $post_id, $max = 3 ) {
             }
             ?>
         </div>
-        <input type="hidden" name="<?php echo esc_attr( $key . '_count' ); ?>" value="<?php echo esc_attr( count( $data ) ); ?>" />
+        <input type="hidden" name="<?php echo esc_attr( $key . '_count' ); ?>" value="<?php echo esc_attr( $count ); ?>" />
     </div>
     <?php
 }
@@ -580,12 +627,13 @@ function cvetanichin_repeater_services( $key, $label, $post_id, $max = 3 ) {
 function cvetanichin_repeater_stats( $key, $label, $post_id, $max = 3 ) {
     $data = get_post_meta( $post_id, $key, true );
     $data = is_array( $data ) ? $data : [];
+    $count = min( count( $data ) + 1, $max );
     ?>
     <div class="cvetanichin-repeater" style="margin-bottom:15px;border:1px solid #ddd;padding:10px;">
         <strong><?php echo esc_html( $label ); ?></strong>
         <div class="cvetanichin-repeater-items">
             <?php
-            for ( $i = 0; $i < min( count( $data ) + 1, $max + 1 ); $i++ ) {
+            for ( $i = 0; $i < $count; $i++ ) {
                 $item = isset( $data[ $i ] ) ? $data[ $i ] : [];
                 ?>
                 <div class="cvetanichin-repeater-item" style="border-top:1px solid #eee;padding:10px;margin-top:10px;">
@@ -597,7 +645,7 @@ function cvetanichin_repeater_stats( $key, $label, $post_id, $max = 3 ) {
             }
             ?>
         </div>
-        <input type="hidden" name="<?php echo esc_attr( $key . '_count' ); ?>" value="<?php echo esc_attr( count( $data ) ); ?>" />
+        <input type="hidden" name="<?php echo esc_attr( $key . '_count' ); ?>" value="<?php echo esc_attr( $count ); ?>" />
     </div>
     <?php
 }
@@ -605,12 +653,13 @@ function cvetanichin_repeater_stats( $key, $label, $post_id, $max = 3 ) {
 function cvetanichin_repeater_products( $key, $label, $post_id, $max = 3 ) {
     $data = get_post_meta( $post_id, $key, true );
     $data = is_array( $data ) ? $data : [];
+    $count = min( count( $data ) + 1, $max );
     ?>
     <div class="cvetanichin-repeater" style="margin-bottom:15px;border:1px solid #ddd;padding:10px;">
         <strong><?php echo esc_html( $label ); ?></strong>
         <div class="cvetanichin-repeater-items">
             <?php
-            for ( $i = 0; $i < min( count( $data ) + 1, $max + 1 ); $i++ ) {
+            for ( $i = 0; $i < $count; $i++ ) {
                 $item = isset( $data[ $i ] ) ? $data[ $i ] : [];
                 ?>
                 <div class="cvetanichin-repeater-item" style="border-top:1px solid #eee;padding:10px;margin-top:10px;">
@@ -625,7 +674,7 @@ function cvetanichin_repeater_products( $key, $label, $post_id, $max = 3 ) {
             }
             ?>
         </div>
-        <input type="hidden" name="<?php echo esc_attr( $key . '_count' ); ?>" value="<?php echo esc_attr( count( $data ) ); ?>" />
+        <input type="hidden" name="<?php echo esc_attr( $key . '_count' ); ?>" value="<?php echo esc_attr( $count ); ?>" />
     </div>
     <?php
 }
@@ -633,12 +682,13 @@ function cvetanichin_repeater_products( $key, $label, $post_id, $max = 3 ) {
 function cvetanichin_repeater_features( $key, $label, $post_id, $max = 4 ) {
     $data = get_post_meta( $post_id, $key, true );
     $data = is_array( $data ) ? $data : [];
+    $count = min( count( $data ) + 1, $max );
     ?>
     <div class="cvetanichin-repeater" style="margin-bottom:15px;border:1px solid #ddd;padding:10px;">
         <strong><?php echo esc_html( $label ); ?></strong>
         <div class="cvetanichin-repeater-items">
             <?php
-            for ( $i = 0; $i < min( count( $data ) + 1, $max + 1 ); $i++ ) {
+            for ( $i = 0; $i < $count; $i++ ) {
                 $item = isset( $data[ $i ] ) ? $data[ $i ] : [];
                 ?>
                 <div class="cvetanichin-repeater-item" style="border-top:1px solid #eee;padding:10px;margin-top:10px;">
@@ -651,7 +701,7 @@ function cvetanichin_repeater_features( $key, $label, $post_id, $max = 4 ) {
             }
             ?>
         </div>
-        <input type="hidden" name="<?php echo esc_attr( $key . '_count' ); ?>" value="<?php echo esc_attr( count( $data ) ); ?>" />
+        <input type="hidden" name="<?php echo esc_attr( $key . '_count' ); ?>" value="<?php echo esc_attr( $count ); ?>" />
     </div>
     <?php
 }
