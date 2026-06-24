@@ -4,28 +4,36 @@
  *
  * @package Cvetanichin
  */
+
+$post_id = get_the_ID();
+$eyebrow = get_post_meta( $post_id, 'footer_cta_eyebrow', true ) ?: 'Work together';
+$headline = get_post_meta( $post_id, 'footer_cta_headline', true ) ?: 'Ready to move forward?';
+$paragraph = get_post_meta( $post_id, 'footer_cta_paragraph', true ) ?: 'Whether you need strategic support for your civil society work or want to start building digital income — the next step is simple.';
+$link1_label = get_post_meta( $post_id, 'footer_cta_link1_label', true ) ?: 'CSO Enquiry';
+$link1_url = get_post_meta( $post_id, 'footer_cta_link1_url', true ) ?: home_url( '/cso-consultancy/' );
+$link2_label = get_post_meta( $post_id, 'footer_cta_link2_label', true ) ?: 'Visit Digital Store →';
+$link2_url = get_post_meta( $post_id, 'footer_cta_link2_url', true ) ?: 'https://cvetanichin.gumroad.com';
 ?>
 <section class="cv-section cv-section--footer-cta" aria-labelledby="cv-fcta-heading">
   <div class="cv-container">
     <div class="cv-fcta-inner cv-reveal">
 
       <div class="cv-fcta-content">
-        <p class="cv-eyebrow">Work together</p>
+        <p class="cv-eyebrow"><?php echo esc_html( $eyebrow ); ?></p>
         <h2 id="cv-fcta-heading">
-          Ready to move forward?
+          <?php echo wp_kses_post( $headline ); ?>
         </h2>
         <p>
-          Whether you need strategic support for your civil society work or want to start building
-          digital income &mdash; the next step is simple.
+          <?php echo wp_kses_post( $paragraph ); ?>
         </p>
       </div>
 
       <div class="cv-fcta-actions">
-        <a href="<?php echo esc_url( home_url( '/cso-consultancy/' ) ); ?>" class="cv-btn cv-btn--outline">
-          CSO Enquiry
+        <a href="<?php echo esc_url( $link1_url ); ?>" class="cv-btn cv-btn--outline">
+          <?php echo esc_html( $link1_label ); ?>
         </a>
-        <a href="https://cvetanichin.gumroad.com" target="_blank" rel="noopener noreferrer" class="cv-btn cv-btn--primary">
-          Visit Digital Store &rarr;
+        <a href="<?php echo esc_url( $link2_url ); ?>" target="_blank" rel="noopener noreferrer" class="cv-btn cv-btn--primary">
+          <?php echo esc_html( $link2_label ); ?>
         </a>
       </div>
 

@@ -5,28 +5,37 @@
  *
  * @package Cvetanichin
  */
+
+$post_id = get_the_ID();
+$eyebrow = get_post_meta( $post_id, 'hero_eyebrow', true ) ?: 'The AI Enthusiast';
+$headline = get_post_meta( $post_id, 'hero_headline', true ) ?: 'CVETANICHIN';
+$tagline = get_post_meta( $post_id, 'hero_tagline', true ) ?: 'Bridging civil society and digital self-sufficiency.<br>Strategic consultancy for NGOs & donors. Digital products for purposeful income.';
+$portrait = get_post_meta( $post_id, 'hero_portrait', true ) ?: get_template_directory_uri() . '/assets/images/ai-persona.png';
+$cta1_label = get_post_meta( $post_id, 'hero_cta1_label', true ) ?: 'CSO Consultancy →';
+$cta1_url = get_post_meta( $post_id, 'hero_cta1_url', true ) ?: home_url( '/cso-consultancy/' );
+$cta2_label = get_post_meta( $post_id, 'hero_cta2_label', true ) ?: 'Digital Workspace →';
+$cta2_url = get_post_meta( $post_id, 'hero_cta2_url', true ) ?: home_url( '/digital-workspace/' );
 ?>
 <section class="cv-hero" aria-labelledby="cv-hero-heading">
   <div class="cv-hero__inner cv-container">
 
     <div class="cv-hero__content">
-      <p class="cv-eyebrow cv-eyebrow--on-dark cv-reveal">The AI Enthusiast</p>
+      <p class="cv-eyebrow cv-eyebrow--on-dark cv-reveal"><?php echo esc_html( $eyebrow ); ?></p>
 
       <h1 id="cv-hero-heading" class="cv-hero__name cv-reveal cv-reveal--delay-1">
-        CVETANICHIN
+        <?php echo esc_html( $headline ); ?>
       </h1>
 
       <p class="cv-hero__tagline cv-reveal cv-reveal--delay-2">
-        Bridging civil society and digital self-sufficiency.<br>
-        Strategic consultancy for NGOs &amp; donors. Digital products for purposeful income.
+        <?php echo wp_kses_post( $tagline ); ?>
       </p>
 
       <div class="cv-hero__actions cv-reveal cv-reveal--delay-3">
-        <a href="<?php echo esc_url( home_url( '/cso-consultancy/' ) ); ?>" class="cv-btn cv-btn--outline-inverse">
-          CSO Consultancy &rarr;
+        <a href="<?php echo esc_url( $cta1_url ); ?>" class="cv-btn cv-btn--outline-inverse">
+          <?php echo esc_html( $cta1_label ); ?>
         </a>
-        <a href="<?php echo esc_url( home_url( '/digital-workspace/' ) ); ?>" class="cv-btn cv-btn--ghost-inverse">
-          Digital Workspace &rarr;
+        <a href="<?php echo esc_url( $cta2_url ); ?>" class="cv-btn cv-btn--ghost-inverse">
+          <?php echo esc_html( $cta2_label ); ?>
         </a>
       </div>
     </div>
@@ -35,7 +44,7 @@
       <div class="cv-hero__portrait-frame">
         <div class="cv-hero__portrait-shadow"></div>
         <img
-          src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/ai-persona.png' ); ?>"
+          src="<?php echo esc_url( $portrait ); ?>"
           alt="Vaska Cvetanoska — Cvetanichin"
           width="440"
           height="550"

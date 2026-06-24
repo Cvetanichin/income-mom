@@ -1,0 +1,193 @@
+/* Cvetanichin Metabox Styling — Admin Interface */
+
+.cvetanichin-metabox {
+  padding: 10px;
+  background: #fafafa;
+  border-radius: 4px;
+}
+
+.cvetanichin-metabox h3 {
+  margin: 20px 0 15px;
+  padding: 10px;
+  background: #f0f0f0;
+  border-left: 4px solid #b8956a;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cvetanichin-metabox h3:first-child {
+  margin-top: 0;
+}
+
+.cvetanichin-field {
+  margin-bottom: 15px;
+}
+
+.cvetanichin-field label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+.cvetanichin-field input[type="text"],
+.cvetanichin-field textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 13px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.cvetanichin-field input[type="text"]:focus,
+.cvetanichin-field textarea:focus {
+  outline: none;
+  border-color: #b8956a;
+  box-shadow: 0 0 0 2px rgba(184, 149, 106, 0.1);
+}
+
+.cvetanichin-field textarea {
+  font-family: Monaco, Menlo, "Ubuntu Mono", Courier, monospace;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* Repeater Fields */
+.cvetanichin-repeater {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 12px;
+  margin-bottom: 15px;
+}
+
+.cvetanichin-repeater > strong {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cvetanichin-repeater-items {
+  margin-bottom: 10px;
+}
+
+.cvetanichin-repeater-item {
+  border-top: 1px solid #eee;
+  padding: 10px 0;
+  margin-top: 10px;
+}
+
+.cvetanichin-repeater-item:first-child {
+  border-top: none;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.cvetanichin-repeater-item input[type="text"],
+.cvetanichin-repeater-item textarea {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.cvetanichin-repeater-item input[type="text"]:focus,
+.cvetanichin-repeater-item textarea:focus {
+  outline: none;
+  border-color: #b8956a;
+  box-shadow: 0 0 0 1px rgba(184, 149, 106, 0.1);
+}
+
+/* Widgets Container */
+.cvetanichin-widgets {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 12px;
+}
+
+.cvetanichin-widgets p {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: #666;
+}
+
+#cvetanichin-widgets-list {
+  margin-bottom: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.cvetanichin-widget-row {
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 3px;
+  padding: 10px;
+  margin: 5px 0;
+}
+
+.cvetanichin-widget-row select,
+.cvetanichin-widget-row input {
+  width: 100%;
+  padding: 6px 8px;
+  margin: 5px 0 0;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 12px;
+  box-sizing: border-box;
+}
+
+.cvetanichin-widget-row select {
+  margin-top: 0;
+}
+
+.cvetanichin-widget-row button {
+  margin-top: 8px;
+  width: 100%;
+}
+
+#cvetanichin-add-widget {
+  width: 100%;
+  background: #b8956a;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#cvetanichin-add-widget:hover {
+  background: #a0813d;
+}
+
+/* Media Button */
+.cvetanichin-media-btn {
+  display: inline-block;
+  margin-top: 5px;
+  padding: 5px 10px !important;
+  font-size: 12px !important;
+  height: auto !important;
+}
+
+/* Preview Images */
+.cvetanichin-field img,
+.cvetanichin-repeater-item img {
+  max-width: 100%;
+  max-height: 200px;
+  margin-top: 10px;
+  border-radius: 3px;
+  display: block;
+}

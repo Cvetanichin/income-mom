@@ -4,18 +4,31 @@
  *
  * @package Cvetanichin
  */
+
+$post_id = get_the_ID();
+$eyebrow = get_post_meta( $post_id, 'domain_workspace_eyebrow', true ) ?: 'Domain 02 — Digital Products for Income';
+$headline = get_post_meta( $post_id, 'domain_workspace_headline', true ) ?: 'Build your first income stream.<br>On your own terms.';
+$paragraph = get_post_meta( $post_id, 'domain_workspace_paragraph', true ) ?: 'Structured digital products for people who are ready to turn knowledge into income without the hype, hustle, or guesswork. Everything is practical, downloadable, and built around honest self-reflection and clear next steps.';
+$stats = get_post_meta( $post_id, 'domain_workspace_stats', true ) ?: [];
+
+// Default stats if none exist
+if ( empty( $stats ) ) {
+    $stats = [
+        [ 'value' => '2', 'label' => 'Products available now', 'description' => '' ],
+        [ 'value' => '€79', 'label' => 'Flagship system — instant download', 'description' => '' ],
+        [ 'value' => '52', 'label' => 'Pages — structured, fillable, focused', 'description' => '' ]
+    ];
+}
 ?>
 <section class="cv-section cv-section--workspace" id="digital-workspace" aria-labelledby="cv-ws-heading">
   <div class="cv-container">
 
     <div class="cv-ws-grid cv-reveal">
       <div class="cv-ws-content">
-        <p class="cv-eyebrow cv-eyebrow--rose">Domain 02 &mdash; Digital Products for Income</p>
-        <h2 id="cv-ws-heading">Build your first income stream.<br>On your own terms.</h2>
+        <p class="cv-eyebrow cv-eyebrow--rose"><?php echo wp_kses_post( $eyebrow ); ?></p>
+        <h2 id="cv-ws-heading"><?php echo wp_kses_post( $headline ); ?></h2>
         <p>
-          Structured digital products for people who are ready to turn knowledge into income
-          without the hype, hustle, or guesswork. Everything is practical, downloadable, and
-          built around honest self-reflection and clear next steps.
+          <?php echo wp_kses_post( $paragraph ); ?>
         </p>
         <a href="<?php echo esc_url( home_url( '/digital-workspace/' ) ); ?>" class="cv-btn cv-btn--primary">
           See All Products &rarr;
@@ -23,18 +36,17 @@
       </div>
 
       <div class="cv-ws-stats">
-        <div class="cv-ws-stat cv-reveal cv-reveal--delay-1">
-          <span class="cv-ws-stat__number">2</span>
-          <span class="cv-ws-stat__label">Products available now</span>
-        </div>
-        <div class="cv-ws-stat cv-reveal cv-reveal--delay-2">
-          <span class="cv-ws-stat__number">€79</span>
-          <span class="cv-ws-stat__label">Flagship system — instant download</span>
-        </div>
-        <div class="cv-ws-stat cv-reveal cv-reveal--delay-3">
-          <span class="cv-ws-stat__number">52</span>
-          <span class="cv-ws-stat__label">Pages — structured, fillable, focused</span>
-        </div>
+        <?php
+        foreach ( $stats as $i => $stat ) {
+            $delay = $i + 1;
+            ?>
+            <div class="cv-ws-stat cv-reveal cv-reveal--delay-<?php echo esc_attr( $delay ); ?>">
+              <span class="cv-ws-stat__number"><?php echo esc_html( $stat['value'] ?? '' ); ?></span>
+              <span class="cv-ws-stat__label"><?php echo wp_kses_post( $stat['label'] ?? '' ); ?></span>
+            </div>
+            <?php
+        }
+        ?>
       </div>
     </div>
 

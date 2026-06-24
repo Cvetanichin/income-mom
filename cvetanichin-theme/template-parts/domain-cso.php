@@ -4,48 +4,58 @@
  *
  * @package Cvetanichin
  */
+
+$post_id = get_the_ID();
+$eyebrow = get_post_meta( $post_id, 'domain_cso_eyebrow', true ) ?: 'Domain 01 — NGOs · Foundations · Donors';
+$headline = get_post_meta( $post_id, 'domain_cso_headline', true ) ?: 'Grant support. Donor compliance.<br>CSO development.';
+$lead = get_post_meta( $post_id, 'domain_cso_lead', true ) ?: 'Strategic services for civil society organisations, foundations, and international donors navigating grant cycles, compliance requirements, and institutional capacity.';
+$services = get_post_meta( $post_id, 'domain_cso_services', true ) ?: [];
+
+// Default services if none exist
+if ( empty( $services ) ) {
+    $services = [
+        [
+            'title' => 'Grant Support',
+            'description' => 'Proposal writing, budget narrative design, funder research, and application strategy across EU, bilateral, and philanthropic funding streams.'
+        ],
+        [
+            'title' => 'Donor Compliance',
+            'description' => 'Reporting frameworks, audit preparation, financial tracking, and donor communication systems that keep your organisation accountable and fundable.'
+        ],
+        [
+            'title' => 'CSO Capacity Building',
+            'description' => 'Governance strengthening, team development, strategic planning, and organisational systems that support sustainable institutional growth.'
+        ]
+    ];
+}
 ?>
 <section class="cv-section cv-section--cso" id="cso-consultancy" aria-labelledby="cv-cso-heading">
   <div class="cv-container">
 
     <div class="cv-section-header cv-reveal">
-      <p class="cv-eyebrow">Domain 01 &mdash; NGOs &middot; Foundations &middot; Donors</p>
-      <h2 id="cv-cso-heading">Grant support. Donor compliance.<br>CSO development.</h2>
+      <p class="cv-eyebrow"><?php echo wp_kses_post( $eyebrow ); ?></p>
+      <h2 id="cv-cso-heading"><?php echo wp_kses_post( $headline ); ?></h2>
       <p class="cv-section-lead">
-        Strategic services for civil society organisations, foundations, and international donors
-        navigating grant cycles, compliance requirements, and institutional capacity.
+        <?php echo wp_kses_post( $lead ); ?>
       </p>
     </div>
 
     <div class="cv-cso-grid">
-
-      <div class="cv-cso-card cv-reveal cv-reveal--delay-1">
-        <div class="cv-cso-card__marker">01</div>
-        <h3 class="cv-cso-card__title">Grant Support</h3>
-        <p class="cv-cso-card__body">
-          Proposal writing, budget narrative design, funder research, and application
-          strategy across EU, bilateral, and philanthropic funding streams.
-        </p>
-      </div>
-
-      <div class="cv-cso-card cv-reveal cv-reveal--delay-2">
-        <div class="cv-cso-card__marker">02</div>
-        <h3 class="cv-cso-card__title">Donor Compliance</h3>
-        <p class="cv-cso-card__body">
-          Reporting frameworks, audit preparation, financial tracking, and donor
-          communication systems that keep your organisation accountable and fundable.
-        </p>
-      </div>
-
-      <div class="cv-cso-card cv-reveal cv-reveal--delay-3">
-        <div class="cv-cso-card__marker">03</div>
-        <h3 class="cv-cso-card__title">CSO Capacity Building</h3>
-        <p class="cv-cso-card__body">
-          Governance strengthening, team development, strategic planning, and
-          organisational systems that support sustainable institutional growth.
-        </p>
-      </div>
-
+      <?php
+      foreach ( $services as $i => $service ) {
+          $marker = str_pad( (string) ( $i + 1 ), 2, '0', STR_PAD_LEFT );
+          $delay = $i + 1;
+          ?>
+          <div class="cv-cso-card cv-reveal cv-reveal--delay-<?php echo esc_attr( $delay ); ?>">
+            <div class="cv-cso-card__marker"><?php echo esc_html( $marker ); ?></div>
+            <h3 class="cv-cso-card__title"><?php echo esc_html( $service['title'] ?? '' ); ?></h3>
+            <p class="cv-cso-card__body">
+              <?php echo wp_kses_post( $service['description'] ?? '' ); ?>
+            </p>
+          </div>
+          <?php
+      }
+      ?>
     </div>
 
     <div class="cv-section-cta cv-reveal">
