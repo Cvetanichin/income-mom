@@ -5,6 +5,29 @@
  *
  * @package Cvetanichin
  */
+
+$post_id = get_the_ID();
+$products = get_post_meta( $post_id, 'products', true ) ?: [];
+
+// Default products if none exist
+if ( empty( $products ) ) {
+    $products = [
+        [
+            'name' => 'Clarity-to-Action Operating System',
+            'description' => 'A 4-stage system that turns honest self-reflection into a results-based 90-day plan. Life audit, energy diagnosis, values clarification, and a structured action framework.',
+            'price' => '€79',
+            'gumroad_url' => 'https://cvetanichin.gumroad.com/l/clarity-to-action',
+            'image' => get_template_directory_uri() . '/assets/images/gumroad-cover.png'
+        ],
+        [
+            'name' => 'AI Income Starter Kit',
+            'description' => 'Everything you need to build and launch your first digital product. Offer clarity, section drafting, sales copy, and a step-by-step launch framework.',
+            'price' => '—',
+            'gumroad_url' => 'https://cvetanichin.gumroad.com/l/ai-income-starter-kit',
+            'image' => get_template_directory_uri() . '/assets/images/the-signature-workbook.png'
+        ]
+    ];
+}
 ?>
 <section class="cv-section cv-section--products" id="products" aria-labelledby="cv-products-heading">
   <div class="cv-container">
@@ -15,70 +38,45 @@
     </div>
 
     <div class="cv-products-grid">
+      <?php
+      foreach ( $products as $i => $product ) {
+          $delay = $i + 1;
+          $gumroad_url = cvetanichin_get_gumroad_link( $product['gumroad_url'] ?? '' );
+          $image = $product['image'] ?? get_template_directory_uri() . '/assets/images/gumroad-cover.png';
+          ?>
+          <article class="cv-product-card cv-reveal cv-reveal--delay-<?php echo esc_attr( $delay ); ?>">
+            <div class="cv-product-card__accent"></div>
+            <div class="cv-product-card__image">
+              <img
+                src="<?php echo esc_url( $image ); ?>"
+                alt="<?php echo esc_attr( $product['name'] ?? '' ); ?> product cover"
+                loading="lazy"
+                width="800"
+                height="450"
+              />
+            </div>
+            <div class="cv-product-card__body">
+              <p class="cv-eyebrow">Digital Product &middot; Instant Download &middot; PDF</p>
+              <h3 class="cv-product-card__title"><?php echo wp_kses_post( $product['name'] ?? '' ); ?></h3>
+              <p class="cv-product-card__desc">
+                <?php echo wp_kses_post( $product['description'] ?? '' ); ?>
+              </p>
+              <div class="cv-product-card__footer">
+                <span class="cv-product-card__price"><?php echo wp_kses_post( $product['price'] ?? '—' ); ?></span>
+                <a href="<?php echo esc_url( $gumroad_url ); ?>"
+                   class="cv-btn cv-btn--primary"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                  Buy on Gumroad &rarr;
+                </a>
+              </div>
+            </div>
+          </article>
+          <?php
+      }
+      ?>
 
-      <!-- Product 1: Clarity-to-Action Operating System -->
-      <article class="cv-product-card cv-reveal cv-reveal--delay-1">
-        <div class="cv-product-card__accent"></div>
-        <div class="cv-product-card__image">
-          <img
-            src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/gumroad-cover.png' ); ?>"
-            alt="Clarity-to-Action Operating System product cover"
-            loading="lazy"
-            width="800"
-            height="450"
-          />
-        </div>
-        <div class="cv-product-card__body">
-          <p class="cv-eyebrow">Workbook &middot; 52 pages &middot; Fillable PDF</p>
-          <h3 class="cv-product-card__title">Clarity-to-Action<br>Operating System</h3>
-          <p class="cv-product-card__desc">
-            A 4-stage system that turns honest self-reflection into a results-based 90-day plan.
-            Life audit, energy diagnosis, values clarification, and a structured action framework.
-          </p>
-          <div class="cv-product-card__footer">
-            <span class="cv-product-card__price">&euro;79</span>
-            <a href="https://cvetanichin.gumroad.com/l/clarity-to-action"
-               class="cv-btn cv-btn--primary"
-               target="_blank"
-               rel="noopener noreferrer">
-              Buy on Gumroad &rarr;
-            </a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Product 2: AI Income Starter Kit -->
-      <article class="cv-product-card cv-reveal cv-reveal--delay-2">
-        <div class="cv-product-card__accent"></div>
-        <div class="cv-product-card__image">
-          <img
-            src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/the-signature-workbook.png' ); ?>"
-            alt="AI Income Starter Kit product cover"
-            loading="lazy"
-            width="1024"
-            height="1024"
-          />
-        </div>
-        <div class="cv-product-card__body">
-          <p class="cv-eyebrow">Guide &middot; Instant Download &middot; PDF</p>
-          <h3 class="cv-product-card__title">AI Income<br>Starter Kit</h3>
-          <p class="cv-product-card__desc">
-            Everything you need to build and launch your first digital product.
-            Offer clarity, section drafting, sales copy, and a step-by-step launch framework.
-          </p>
-          <div class="cv-product-card__footer">
-            <span class="cv-product-card__price">&mdash;</span>
-            <a href="https://cvetanichin.gumroad.com/l/ai-income-starter-kit"
-               class="cv-btn cv-btn--primary"
-               target="_blank"
-               rel="noopener noreferrer">
-              Buy on Gumroad &rarr;
-            </a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Product 3: Creative Life Space (coming soon) -->
+      <!-- Coming Soon: Vas Digital Console -->
       <article class="cv-product-card cv-product-card--soon cv-reveal cv-reveal--delay-3">
         <div class="cv-product-card__accent cv-product-card__accent--muted"></div>
         <div class="cv-product-card__image cv-product-card__image--placeholder">

@@ -4,6 +4,15 @@
  *
  * @package Cvetanichin
  */
+
+$post_id = get_the_ID();
+$console_title = get_post_meta( $post_id, 'console_title', true ) ?: 'Vas Digital Console';
+$console_desc = get_post_meta( $post_id, 'console_description', true ) ?: 'Your personal creative life space — daily reflection, planning rituals, coaching prompts, and quiet focus. Built for Vaska.';
+$console_features = get_post_meta( $post_id, 'console_features', true ) ?: 'Moodboard · Planning · Journal · Coach · Celestial';
+
+// Parse features from comma/dot-separated string
+$feature_list = array_map( 'trim', preg_split( '/[·,]/', $console_features ) );
+$feature_list = array_filter( $feature_list );
 ?>
 <section class="cv-section cv-section--console" id="vas-digital-console" aria-labelledby="cv-console-heading">
   <div class="cv-container">
@@ -18,24 +27,22 @@
         </div>
 
         <h2 id="cv-console-heading" class="cv-console-title">
-          Vas Digital Console
+          <?php echo esc_html( $console_title ); ?>
         </h2>
 
         <p class="cv-console-desc">
-          Your personal creative life space &mdash; daily reflection, planning rituals,
-          coaching prompts, and quiet focus. Built for Vaska.
+          <?php echo wp_kses_post( $console_desc ); ?>
         </p>
 
         <div class="cv-console-features">
-          <span>Moodboard</span>
-          <span>&middot;</span>
-          <span>Planning</span>
-          <span>&middot;</span>
-          <span>Journal</span>
-          <span>&middot;</span>
-          <span>Coach</span>
-          <span>&middot;</span>
-          <span>Celestial</span>
+          <?php
+          foreach ( $feature_list as $i => $feature ) {
+              if ( $i > 0 ) {
+                  echo '<span>&middot;</span>';
+              }
+              echo '<span>' . esc_html( $feature ) . '</span>';
+          }
+          ?>
         </div>
 
         <?php if ( is_user_logged_in() ) : ?>
