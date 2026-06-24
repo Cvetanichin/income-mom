@@ -53,16 +53,18 @@ if ( empty( $products ) ) {
                 loading="lazy"
                 width="800"
                 height="450"
+                data-meta-key="products_<?php echo esc_attr( $i ); ?>_image"
+                data-field-type="image"
               />
             </div>
             <div class="cv-product-card__body">
               <p class="cv-eyebrow">Digital Product &middot; Instant Download &middot; PDF</p>
-              <h3 class="cv-product-card__title"><?php echo wp_kses_post( $product['name'] ?? '' ); ?></h3>
-              <p class="cv-product-card__desc">
+              <h3 class="cv-product-card__title" data-meta-key="products_<?php echo esc_attr( $i ); ?>_name" data-field-type="text"><?php echo wp_kses_post( $product['name'] ?? '' ); ?></h3>
+              <p class="cv-product-card__desc" data-meta-key="products_<?php echo esc_attr( $i ); ?>_description" data-field-type="textarea">
                 <?php echo wp_kses_post( $product['description'] ?? '' ); ?>
               </p>
               <div class="cv-product-card__footer">
-                <span class="cv-product-card__price"><?php echo wp_kses_post( $product['price'] ?? '—' ); ?></span>
+                <span class="cv-product-card__price" data-meta-key="products_<?php echo esc_attr( $i ); ?>_price" data-field-type="text"><?php echo wp_kses_post( $product['price'] ?? '—' ); ?></span>
                 <a href="<?php echo esc_url( $gumroad_url ); ?>"
                    class="cv-btn cv-btn--primary"
                    target="_blank"

@@ -33,9 +33,9 @@ if ( empty( $services ) ) {
   <div class="cv-container">
 
     <div class="cv-section-header cv-reveal">
-      <p class="cv-eyebrow"><?php echo wp_kses_post( $eyebrow ); ?></p>
-      <h2 id="cv-cso-heading"><?php echo wp_kses_post( $headline ); ?></h2>
-      <p class="cv-section-lead">
+      <p class="cv-eyebrow" data-meta-key="domain_cso_eyebrow" data-field-type="text"><?php echo wp_kses_post( $eyebrow ); ?></p>
+      <h2 id="cv-cso-heading" data-meta-key="domain_cso_headline" data-field-type="text"><?php echo wp_kses_post( $headline ); ?></h2>
+      <p class="cv-section-lead" data-meta-key="domain_cso_lead" data-field-type="textarea">
         <?php echo wp_kses_post( $lead ); ?>
       </p>
     </div>

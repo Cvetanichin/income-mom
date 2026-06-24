@@ -26,11 +26,11 @@ $feature_list = array_filter( $feature_list );
           <p class="cv-eyebrow cv-eyebrow--on-dark">Private Access</p>
         </div>
 
-        <h2 id="cv-console-heading" class="cv-console-title">
+        <h2 id="cv-console-heading" class="cv-console-title" data-meta-key="console_title" data-field-type="text">
           <?php echo esc_html( $console_title ); ?>
         </h2>
 
-        <p class="cv-console-desc">
+        <p class="cv-console-desc" data-meta-key="console_description" data-field-type="textarea">
           <?php echo wp_kses_post( $console_desc ); ?>
         </p>
 
